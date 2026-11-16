@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')
         ->name('dashboard');
 
+    Route::view('/members', 'members.index')
+        ->name('members.index');
+
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('logout');
 });

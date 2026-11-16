@@ -81,7 +81,7 @@
                             </x-ui.sidebar-menu-item>
 
                             <x-ui.sidebar-menu-item>
-                                <x-ui.sidebar-menu-button as="a" href="#" tooltip="Members">
+                                <x-ui.sidebar-menu-button as="a" href="{{ route('members.index') }}" tooltip="Members">
                                     <x-lucide-users class="h-4 w-4" />
                                     <span>Members</span>
                                 </x-ui.sidebar-menu-button>
