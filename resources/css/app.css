@@ -77,3 +77,34 @@ body,
 [data-slot="sidebar"] {
     transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+/* AGMA ONE - Light Pagination */
+.pagination-light nav a,
+.pagination-light nav span {
+    background-color: #ffffff !important;
+    color: #64748b !important;
+    border-color: #e2e8e0 !important;
+    box-shadow: none !important;
+}
+
+.pagination-light nav a:hover {
+    background-color: #f1f5ef !important;
+    color: #587447 !important;
+}
+
+.pagination-light nav span[aria-current="page"] {
+    background-color: #789A60 !important;
+    color: #ffffff !important;
+    border-color: #789A60 !important;
+}
+
+/* Disabled Previous / Next */
+.pagination-light nav span[aria-disabled="true"] {
+    background-color: #f8faf7 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Pagination arrows */
+.pagination-light nav svg {
+    color: #64748b !important;
+}
