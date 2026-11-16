@@ -6,7 +6,6 @@
     {{-- LEFT BRANDING PANEL --}}
     <section class="relative hidden min-h-screen flex-col justify-between overflow-hidden bg-[#172B3A] px-12 py-10 text-white lg:flex xl:px-16">
 
-        {{-- Background decoration --}}
         <div class="pointer-events-none absolute inset-0 overflow-hidden">
             <div class="absolute -right-40 -top-40 h-[550px] w-[550px] rounded-full border border-white/[0.06]"></div>
             <div class="absolute -right-20 -top-20 h-[400px] w-[400px] rounded-full border border-white/[0.06]"></div>
@@ -182,8 +181,13 @@
             @endif
 
             {{-- Login form --}}
-             {{-- action="{{ route('login.store') }}" --}}
-            <form method="POST" class="space-y-6">
+            <form
+                method="POST"
+                action="{{ route('login.store') }}"
+                class="space-y-6"
+                x-data="{ submitting: false }"
+                @submit="submitting = true"
+            >
                 @csrf
 
                 {{-- Email --}}
@@ -225,9 +229,8 @@
                             Password
                         </label>
 
-                        {{-- {{ route('password.request') }} --}}
                         @if (Route::has('password.request'))
-                            <a href=""
+                            <a href="{{ route('password.request') }}"
                                class="text-xs font-semibold text-[#789A60] transition hover:text-[#536F42]">
                                 Forgot password?
                             </a>
@@ -292,13 +295,25 @@
                 {{-- Submit --}}
                 <button
                     type="submit"
-                    class="group flex h-13 w-full items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 text-sm font-semibold text-white shadow-lg shadow-[#172B3A]/10 transition hover:bg-[#243E50] focus:outline-none focus:ring-4 focus:ring-[#789A60]/20 active:scale-[0.99]"
+                    :disabled="submitting"
+                    class="group flex h-13 w-full items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 text-sm font-semibold text-white shadow-lg shadow-[#172B3A]/10 transition hover:bg-[#243E50] focus:outline-none focus:ring-4 focus:ring-[#789A60]/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                    Sign in
+                    <span x-show="!submitting">Sign in</span>
+                    <span x-show="submitting" x-cloak>Signing in...</span>
 
-                    <svg class="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    <svg x-show="!submitting"
+                         class="h-4 w-4 transition-transform group-hover:translate-x-1"
                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14m-6-6 6 6-6 6"/>
+                    </svg>
+
+                    <svg x-show="submitting" x-cloak
+                         class="h-4 w-4 animate-spin"
+                         viewBox="0 0 24 24" fill="none">
+                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                stroke="currentColor" stroke-width="4"/>
+                        <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4Z"/>
                     </svg>
                 </button>
 
