@@ -1,1 +1,79 @@
+
 @import "./blatui.css";
+
+/* =========================================================
+   AGMA ONE - FORCED LIGHT THEME
+   ========================================================= */
+
+:root,
+html.dark {
+    color-scheme: light;
+
+    --background: #F7F8F6;
+    --foreground: #172B3A;
+
+    --card: #FFFFFF;
+    --card-foreground: #172B3A;
+
+    --popover: #FFFFFF;
+    --popover-foreground: #172B3A;
+
+    --primary: #789A60;
+    --primary-foreground: #FFFFFF;
+
+    --secondary: #EDF3E9;
+    --secondary-foreground: #587447;
+
+    --muted: #F1F3EF;
+    --muted-foreground: #64748B;
+
+    --accent: #EDF3E9;
+    --accent-foreground: #587447;
+
+    --border: #E8ECE7;
+    --input: #E8ECE7;
+    --ring: #789A60;
+
+    --sidebar: #FFFFFF;
+    --sidebar-foreground: #172B3A;
+
+    --sidebar-primary: #789A60;
+    --sidebar-primary-foreground: #FFFFFF;
+
+    --sidebar-accent: #F1F6ED;
+    --sidebar-accent-foreground: #587447;
+
+    --sidebar-border: #E8ECE7;
+    --sidebar-ring: #789A60;
+}
+
+/* Keep dark-mode elements visually light */
+html.dark body {
+    background-color: #F7F8F6 !important;
+    color: #172B3A !important;
+}
+
+html.dark [data-slot="sidebar"],
+html.dark [data-slot="sidebar-container"] {
+    background-color: #FFFFFF !important;
+    color: #172B3A !important;
+    border-color: #E8ECE7 !important;
+}
+
+/* Consistent application background */
+body {
+    background-color: #F7F8F6;
+    color: #172B3A;
+}
+
+/* Consistent sidebar appearance */
+[data-slot="sidebar"] {
+    background-color: #FFFFFF;
+    color: #172B3A;
+}
+
+/* Smooth theme appearance */
+body,
+[data-slot="sidebar"] {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
