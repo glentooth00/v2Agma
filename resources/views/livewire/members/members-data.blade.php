@@ -1,3 +1,6 @@
+<div>
+    {{-- Nothing worth having comes easy. - Theodore Roosevelt --}}
+</div>
 
 <x-layout.app title="Members">
 
@@ -36,7 +39,7 @@
                 </p>
             </div>
 
-            <form method="GET" action="{{ route('members.index') }}">
+            <form method="GET" action="{{ route('members.members-data') }}">
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
 
                     {{-- FIRST NAME --}}
@@ -94,7 +97,7 @@
 
                 {{-- SEARCH BUTTONS --}}
                 <div class="mt-5 flex flex-wrap justify-end gap-2">
-                    <a href="{{ route('members.index') }}"
+                    <a href="{{ route('members.members-data') }}"
                         class="rounded-xl border border-[#E2E8E0] bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
                         Clear
                     </a>

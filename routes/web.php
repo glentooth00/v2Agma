@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Registration\MemberRegistration;
+use App\Livewire\Members\MembersData;
 
 Route::get('/', function () {
     return view('login');
@@ -21,8 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')
         ->name('dashboard');
 
-    Route::view('/members', 'members.index')
+    Route::get('/members', MembersData::class)
         ->name('members.index');
+
+
 
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('logout');
