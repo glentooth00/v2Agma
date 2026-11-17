@@ -23,148 +23,163 @@
         </span>
     </div>
 
-    {{-- SEARCH FILTERS --}}
-    <div class="rounded-2xl border border-[#E8ECE7] bg-white p-5 shadow-sm">
 
-        <div class="mb-5">
-            <div class="flex items-center gap-2">
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EDF3E9]">
-                    <x-lucide-search class="h-4 w-4 text-[#789A60]" />
+{{-- SEARCH FILTERS --}}
+<div class="rounded-2xl border border-[#E8ECE7] bg-white p-4 shadow-sm">
+
+    {{-- HEADER --}}
+    <div class="mb-4 flex items-center gap-2">
+        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EDF3E9]">
+            <x-lucide-search class="h-4 w-4 text-[#789A60]" />
+        </div>
+
+        <div>
+            <h2 class="text-sm font-bold text-[#172B3A]">
+                Search Members
+            </h2>
+            <p class="text-xs text-slate-500">
+                Filter the directory using the member's name and status.
+            </p>
+        </div>
+    </div>
+
+    <form wire:submit.prevent="$refresh">
+
+        {{-- SEARCH INPUTS --}}
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+
+            {{-- FIRST NAME --}}
+            <div>
+                <label for="firstname"
+                    class="mb-1.5 block text-xs font-semibold text-[#34465A]">
+                    First Name
+                </label>
+
+                <div class="relative">
+                    <x-lucide-user
+                        class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+
+                    <input
+                        type="text"
+                        id="firstname"
+                        wire:model="firstname"
+                        placeholder="Search first name"
+                        autocomplete="off"
+                        class="h-10 w-full rounded-lg border border-[#E2E8E0] bg-[#FAFBF9] pl-9 pr-3 text-sm text-[#172B3A] outline-none transition placeholder:text-slate-400 focus:border-[#789A60] focus:bg-white focus:ring-2 focus:ring-[#789A60]/10"
+                    >
                 </div>
+            </div>
 
-                <div>
-                    <h2 class="text-base font-bold text-[#172B3A]">
+            {{-- MIDDLE NAME --}}
+            <div>
+                <label for="middlename"
+                    class="mb-1.5 block text-xs font-semibold text-[#34465A]">
+                    Middle Name
+                </label>
+
+                <div class="relative">
+                    <x-lucide-user-round
+                        class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+
+                    <input
+                        type="text"
+                        id="middlename"
+                        wire:model="middlename"
+                        placeholder="Search middle name"
+                        autocomplete="off"
+                        class="h-10 w-full rounded-lg border border-[#E2E8E0] bg-[#FAFBF9] pl-9 pr-3 text-sm text-[#172B3A] outline-none transition placeholder:text-slate-400 focus:border-[#789A60] focus:bg-white focus:ring-2 focus:ring-[#789A60]/10"
+                    >
+                </div>
+            </div>
+
+            {{-- LAST NAME --}}
+            <div>
+                <label for="lastname"
+                    class="mb-1.5 block text-xs font-semibold text-[#34465A]">
+                    Last Name
+                </label>
+
+                <div class="relative">
+                    <x-lucide-user-round
+                        class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+
+                    <input
+                        type="text"
+                        id="lastname"
+                        wire:model="lastname"
+                        placeholder="Search last name"
+                        autocomplete="off"
+                        class="h-10 w-full rounded-lg border border-[#E2E8E0] bg-[#FAFBF9] pl-9 pr-3 text-sm text-[#172B3A] outline-none transition placeholder:text-slate-400 focus:border-[#789A60] focus:bg-white focus:ring-2 focus:ring-[#789A60]/10"
+                    >
+                </div>
+            </div>
+
+            {{-- MEMBERSHIP STATUS --}}
+            <div>
+                <label for="membership_status"
+                    class="mb-1.5 block text-xs font-semibold text-[#34465A]">
+                    Membership Status
+                </label>
+
+                <select
+                    id="membership_status"
+                    wire:model="membership_status"
+                    class="h-10 w-full rounded-lg border border-[#E2E8E0] bg-[#FAFBF9] px-3 text-sm text-[#172B3A] outline-none transition focus:border-[#789A60] focus:bg-white focus:ring-2 focus:ring-[#789A60]/10"
+                >
+                    <option value="">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
+        </div>
+
+        {{-- SEARCH ACTIONS --}}
+        <div class="mt-4 flex flex-col gap-3 border-t border-[#EEF0EC] pt-3 sm:flex-row sm:items-center sm:justify-between">
+
+            <p class="text-xs text-slate-400">
+                <x-lucide-info class="mr-1 inline h-3.5 w-3.5" />
+                Enter one or more fields to filter the member directory.
+            </p>
+
+            <div class="flex items-center justify-end gap-2">
+
+                {{-- CLEAR --}}
+                <button
+                    type="button"
+                    wire:click="clearSearch"
+                    wire:loading.attr="disabled"
+                    class="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-[#E2E8E0] bg-white px-4 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+                >
+                    <x-lucide-rotate-ccw class="h-3.5 w-3.5" />
+                    Clear
+                </button>
+
+                {{-- SEARCH --}}
+                <button
+                    type="submit"
+                    wire:loading.attr="disabled"
+                    class="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-[#789A60] px-4 text-xs font-bold text-white shadow-sm transition hover:bg-[#688A51] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    <span wire:loading.remove wire:target="$refresh"
+                        class="inline-flex items-center gap-1.5">
+                        <x-lucide-search class="h-3.5 w-3.5" />
                         Search Members
-                    </h2>
+                    </span>
 
-                    <p class="text-xs text-slate-500">
-                        Filter the directory using the member's name.
-                    </p>
-                </div>
+                    <span wire:loading wire:target="$refresh"
+                        class="inline-flex items-center gap-1.5">
+                        <x-lucide-loader-circle class="h-3.5 w-3.5 animate-spin" />
+                        Searching...
+                    </span>
+                </button>
+
             </div>
         </div>
 
+    </form>
+</div>
 
-<form wire:submit.prevent="$refresh">
-
-    {{-- SEARCH INPUTS --}}
-    <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
-
-        {{-- FIRST NAME --}}
-        <div class="space-y-2">
-            <label for="firstname"
-                class="block text-sm font-semibold text-[#34465A]">
-                First Name
-            </label>
-
-            <div class="relative">
-                <x-lucide-user
-                    class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-
-                <input
-                    type="text"
-                    id="firstname"
-                    wire:model="firstname"
-                    placeholder="Search first name"
-                    autocomplete="off"
-                    class="h-12 w-full rounded-xl border border-[#E2E8E0] bg-[#FAFBF9] pl-10 pr-4 text-sm text-[#172B3A] outline-none transition duration-200 placeholder:text-slate-400 hover:border-[#C9D5C3] focus:border-[#789A60] focus:bg-white focus:ring-4 focus:ring-[#789A60]/10"
-                >
-            </div>
-        </div>
-
-        {{-- MIDDLE NAME --}}
-        <div class="space-y-2">
-            <label for="middlename"
-                class="block text-sm font-semibold text-[#34465A]">
-                Middle Name
-            </label>
-
-            <div class="relative">
-                <x-lucide-user-round
-                    class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-
-                <input
-                    type="text"
-                    id="middlename"
-                    wire:model="middlename"
-                    placeholder="Search middle name"
-                    autocomplete="off"
-                    class="h-12 w-full rounded-xl border border-[#E2E8E0] bg-[#FAFBF9] pl-10 pr-4 text-sm text-[#172B3A] outline-none transition duration-200 placeholder:text-slate-400 hover:border-[#C9D5C3] focus:border-[#789A60] focus:bg-white focus:ring-4 focus:ring-[#789A60]/10"
-                >
-            </div>
-        </div>
-
-        {{-- LAST NAME --}}
-        <div class="space-y-2">
-            <label for="lastname"
-                class="block text-sm font-semibold text-[#34465A]">
-                Last Name
-            </label>
-
-            <div class="relative">
-                <x-lucide-user-round
-                    class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-
-                <input
-                    type="text"
-                    id="lastname"
-                    wire:model="lastname"
-                    placeholder="Search last name"
-                    autocomplete="off"
-                    class="h-12 w-full rounded-xl border border-[#E2E8E0] bg-[#FAFBF9] pl-10 pr-4 text-sm text-[#172B3A] outline-none transition duration-200 placeholder:text-slate-400 hover:border-[#C9D5C3] focus:border-[#789A60] focus:bg-white focus:ring-4 focus:ring-[#789A60]/10"
-                >
-            </div>
-        </div>
-
-    </div>
-
-    {{-- SEARCH ACTIONS --}}
-    <div class="mt-6 flex flex-col-reverse gap-3 border-t border-[#EEF0EC] pt-5 sm:flex-row sm:items-center sm:justify-between">
-
-        <p class="text-xs text-slate-400">
-            <x-lucide-info class="mr-1 inline h-3.5 w-3.5" />
-            Enter one or more fields to filter the member directory.
-        </p>
-
-        <div class="flex items-center justify-end gap-2">
-
-            {{-- CLEAR --}}
-            <button
-                type="button"
-                wire:click="clearSearch"
-                wire:loading.attr="disabled"
-                class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#E2E8E0] bg-white px-5 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:opacity-50">
-
-                <x-lucide-rotate-ccw class="h-4 w-4" />
-                Clear
-            </button>
-
-            {{-- SEARCH --}}
-            <button
-                type="submit"
-                wire:loading.attr="disabled"
-                class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#789A60] px-6 text-sm font-bold text-white shadow-sm transition hover:bg-[#688A51] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60">
-
-                <span wire:loading.remove wire:target="$refresh"
-                    class="inline-flex items-center gap-2">
-                    <x-lucide-search class="h-4 w-4" />
-                    Search Members
-                </span>
-
-                <span wire:loading wire:target="$refresh"
-                    class="inline-flex items-center gap-2">
-                    <x-lucide-loader-circle class="h-4 w-4 animate-spin" />
-                    Searching...
-                </span>
-
-            </button>
-
-        </div>
-    </div>
-
-</form>
-
-    </div>
 
     {{-- MEMBERS TABLE --}}
     <div class="overflow-hidden rounded-2xl border border-[#E8ECE7] bg-white shadow-sm">

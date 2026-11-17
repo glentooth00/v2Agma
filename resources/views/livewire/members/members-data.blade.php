@@ -93,6 +93,32 @@
                         >
                     </div>
 
+                    {{-- MEMBERSHIP STATUS --}}
+                    <div>
+                        <label for="membership_status"
+                            class="mb-2 block text-sm font-semibold text-[#34465A]">
+                            Membership Status
+                        </label>
+
+                        <select
+                            id="membership_status"
+                            name="membership_status"
+                            class="w-full rounded-xl border border-[#E2E8E0] bg-white px-4 py-3 text-sm text-[#172B3A] outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/15"
+                        >
+                            <option value="">All Statuses</option>
+
+                            <option value="Active"
+                                {{ request('membership_status') === 'Active' ? 'selected' : '' }}>
+                                Active
+                            </option>
+
+                            <option value="Inactive"
+                                {{ request('membership_status') === 'Inactive' ? 'selected' : '' }}>
+                                Inactive
+                            </option>
+                        </select>
+                    </div>
+
                 </div>
 
                 {{-- SEARCH BUTTONS --}}
