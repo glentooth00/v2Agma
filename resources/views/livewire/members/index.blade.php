@@ -4,9 +4,6 @@
     {{-- PAGE HEADER --}}
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <p class="text-sm font-semibold text-[#789A60]">
-                Member Management
-            </p>
 
             <h1 class="mt-1 text-2xl font-extrabold tracking-tight text-[#172B3A]">
                 Members
@@ -121,15 +118,17 @@
                     Membership Status
                 </label>
 
-                <select
-                    id="membership_status"
-                    wire:model="membership_status"
-                    class="h-10 w-full rounded-lg border border-[#E2E8E0] bg-[#FAFBF9] px-3 text-sm text-[#172B3A] outline-none transition focus:border-[#789A60] focus:bg-white focus:ring-2 focus:ring-[#789A60]/10"
-                >
-                    <option value="">All Statuses</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
+                <x-ui.select id="membership_status"
+                    wire:model="membership_status">
+                    <x-ui.select-trigger class="w-[180px]" aria-label="Theme">
+                        <x-ui.select-value placeholder="Filter Status" />
+                    </x-ui.select-trigger>
+                    <x-ui.select-content>
+                        <x-ui.select-item value="">All Statuses</x-ui.select-item>
+                        <x-ui.select-item value="Active">Active</x-ui.select-item>
+                        <x-ui.select-item value="Inactive">Inactive</x-ui.select-item>
+                    </x-ui.select-content>
+                </x-ui.select>
             </div>
 
         </div>
