@@ -1,7 +1,7 @@
 
 <div
     x-data="{
-        classification: '',
+        classification: @entangle('classification'),
         step: 1
     }"
     class="min-h-screen"
@@ -66,40 +66,51 @@
         </div>
 
         {{-- PROGRESS --}}
-        <div class="mb-6 flex items-center justify-center gap-3">
+        <div class="mb-6 flex items-center justify-center gap-2 sm:gap-3">
+
             <div class="flex items-center gap-2">
-                <span
-                    class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
-                    :class="step === 1
-                        ? 'bg-[#172B3A] text-white'
-                        : 'bg-[#789A60] text-white'"
-                >
+                <span class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
+                      :class="step === 1 ? 'bg-[#172B3A] text-white' : 'bg-[#789A60] text-white'">
                     <span x-show="step === 1">1</span>
-                    <svg x-show="step === 2" x-cloak class="h-4 w-4"
+                    <svg x-show="step > 1" x-cloak class="h-4 w-4"
                          viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                               d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
                               clip-rule="evenodd"/>
                     </svg>
                 </span>
-                <span class="text-xs font-semibold text-[#172B3A]">
+                <span class="hidden text-xs font-semibold text-[#172B3A] sm:inline">
                     Account Type
                 </span>
             </div>
 
-            <div class="h-px w-10 bg-slate-300"></div>
+            <div class="h-px w-5 bg-slate-300 sm:w-10"></div>
 
             <div class="flex items-center gap-2">
-                <span
-                    class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
-                    :class="step === 2
-                        ? 'bg-[#172B3A] text-white'
-                        : 'bg-slate-200 text-slate-500'"
-                >
-                    2
+                <span class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
+                      :class="step === 2 ? 'bg-[#172B3A] text-white' : step === 3 ? 'bg-[#789A60] text-white' : 'bg-slate-200 text-slate-500'">
+                    <span x-show="step < 3">2</span>
+                    <svg x-show="step === 3" x-cloak class="h-4 w-4"
+                         viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
+                              clip-rule="evenodd"/>
+                    </svg>
                 </span>
-                <span class="text-xs font-semibold text-slate-500">
-                    Registration Details
+                <span class="hidden text-xs font-semibold text-slate-500 sm:inline">
+                    Find Account
+                </span>
+            </div>
+
+            <div class="h-px w-5 bg-slate-300 sm:w-10"></div>
+
+            <div class="flex items-center gap-2">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
+                      :class="step === 3 ? 'bg-[#172B3A] text-white' : 'bg-slate-200 text-slate-500'">
+                    3
+                </span>
+                <span class="hidden text-xs font-semibold text-slate-500 sm:inline">
+                    Registration
                 </span>
             </div>
         </div>
@@ -110,20 +121,23 @@
             {{-- CARD HEADER --}}
             <div class="border-b border-[#E9EDE9] px-6 py-5 sm:px-8">
                 <h3 class="font-semibold text-[#172B3A]"
-                      x-text="step === 1
+                    x-text="step === 1
                         ? 'Select Account Classification'
-                        : 'Registration Information'">
+                        : step === 2
+                            ? 'Find Your Member Account'
+                            : 'Registration Information'">
                 </h3>
 
                 <p class="mt-1 text-xs text-slate-500"
                    x-text="step === 1
                     ? 'Choose the classification that matches your electric service account.'
-                    : 'Complete the required information below.'">
+                    : step === 2
+                        ? 'Search and select your existing member-consumer record.'
+                        : 'Complete the required information below.'">
                 </p>
             </div>
 
-            <form method="POST" action="#">
-                @csrf
+            <form wire:submit.prevent="submit">
 
                 {{-- ===================================== --}}
                 {{-- STEP 1: ACCOUNT CLASSIFICATION       --}}
@@ -167,10 +181,8 @@
                                         </svg>
                                     </div>
 
-                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-slate-300
-                                        peer-checked:border-[#789A60]
-                                        peer-checked:bg-[#789A60]">
-                                        <svg class="h-4 w-4 text-white" viewBox="0 0 20 20"
+                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-slate-300 text-transparent peer-checked:border-[#789A60] peer-checked:bg-[#789A60] peer-checked:text-white">
+                                        <svg class="h-4 w-4" viewBox="0 0 20 20"
                                              fill="currentColor">
                                             <path fill-rule="evenodd"
                                                   d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
@@ -191,10 +203,13 @@
                                 <p class="mt-4 text-xs font-semibold text-[#789A60]">
                                     Individual / Household Account
                                 </p>
+                                <p class="mt-1 text-xs text-slate-400">
+                                    Single or Joint
+                                </p>
                             </div>
                         </label>
 
-                        {{-- JURIDICAL / PUBLIC BUILDING --}}
+                        {{-- JURIDICAL --}}
                         <label class="relative cursor-pointer">
                             <input
                                 type="radio"
@@ -219,10 +234,8 @@
                                         </svg>
                                     </div>
 
-                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-slate-300
-                                        peer-checked:border-[#365D7A]
-                                        peer-checked:bg-[#365D7A]">
-                                        <svg class="h-4 w-4 text-white" viewBox="0 0 20 20"
+                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-slate-300 text-transparent peer-checked:border-[#365D7A] peer-checked:bg-[#365D7A] peer-checked:text-white">
+                                        <svg class="h-4 w-4" viewBox="0 0 20 20"
                                              fill="currentColor">
                                             <path fill-rule="evenodd"
                                                   d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
@@ -255,7 +268,12 @@
 
                     <button
                         type="button"
-                        @click="if (classification) step = 2"
+                        @click="
+                            if (classification) {
+                                $wire.set('classification', classification);
+                                step = 2;
+                            }
+                        "
                         :disabled="!classification"
                         class="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 text-sm font-semibold text-white transition hover:bg-[#243E50] disabled:cursor-not-allowed disabled:opacity-40"
                     >
@@ -269,22 +287,31 @@
 
 
                 {{-- ===================================== --}}
-                {{-- STEP 2: REGISTRATION DETAILS         --}}
+                {{-- STEP 2: FIND MEMBER ACCOUNT           --}}
                 {{-- ===================================== --}}
                 <div x-show="step === 2" x-cloak x-transition
-                     class="space-y-8 px-6 py-8 sm:px-8">
+                     class="space-y-6 px-6 py-8 sm:px-8">
 
-                    {{-- SELECTED ACCOUNT TYPE --}}
+                    <div>
+                        <h4 class="text-lg font-bold text-[#172B3A]">
+                            Find Your Member Account
+                        </h4>
+                        <p class="mt-2 text-sm text-slate-500">
+                            Search for your existing member-consumer record to continue.
+                        </p>
+                    </div>
+
+                    {{-- SELECTED CLASSIFICATION --}}
                     <div class="flex items-center justify-between rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
                         <div>
                             <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                Selected Account Type
+                                Account Classification
                             </p>
 
                             <p class="mt-1 text-sm font-bold text-[#172B3A]"
                                x-text="classification === 'residential'
-                                ? 'Residential'
-                                : 'Juridical / Public Building'">
+                                    ? 'Residential'
+                                    : 'Juridical / Public Building'">
                             </p>
                         </div>
 
@@ -293,6 +320,219 @@
                                 class="text-xs font-semibold text-[#789A60] hover:underline">
                             Change
                         </button>
+                    </div>
+
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+        {{-- First Name --}}
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-[#172B3A]">
+                First Name
+            </label>
+            <input
+                type="text"
+                wire:model.live.debounce.300ms="firstname"
+                placeholder="Enter first name"
+                class="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/20"
+            >
+        </div>
+
+        {{-- Middle Name --}}
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-[#172B3A]">
+                Middle Name
+            </label>
+            <input
+                type="text"
+                wire:model.live.debounce.300ms="middlename"
+                placeholder="Enter middle name"
+                @disabled($classification !== 'residential')
+                class="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/20 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+            >
+        </div>
+
+        {{-- Last Name --}}
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-[#172B3A]">
+                Last Name
+            </label>
+            <input
+                type="text"
+                wire:model.live.debounce.300ms="lastname"
+                placeholder="Enter last name"
+                @disabled($classification !== 'residential')
+                class="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/20 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+            >
+        </div>
+
+    </div>
+
+
+    <p class="text-xs text-slate-400">
+        <span x-show="classification === 'residential'">
+            Enter any combination of first, middle, and last name to find your account.
+        </span>
+
+        <span x-show="classification === 'juridical_public_building'">
+            For juridical accounts, search using the First Name field only.
+        </span>
+    </p>
+
+                    {{-- LOADING --}}
+                    <div wire:loading.delay wire:target="search"
+                         class="flex items-center gap-2 text-xs font-medium text-[#789A60]">
+                        <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" opacity=".25"/>
+                            <path d="M22 12a10 10 0 0 1-10 10"/>
+                        </svg>
+                        Searching accounts...
+                    </div>
+
+                    {{-- SEARCH RESULTS --}}
+                    <div class="space-y-3" wire:loading.remove wire:target="search">
+
+                        @if(strlen(trim($search ?? '')) >= 2)
+
+                            @forelse($members as $member)
+
+                                @php
+                                    $memberName = trim(
+                                        ($member->firstname ?? '') . ' ' .
+                                        ($member->middlename ?? '') . ' ' .
+                                        ($member->lastname ?? '')
+                                    );
+                                @endphp
+
+                                <div wire:key="member-result-{{ $member->id }}"
+                                     class="flex flex-col gap-3 rounded-xl border p-4 transition sm:flex-row sm:items-center sm:justify-between
+                                     {{ $selectedMemberId == $member->id
+                                        ? 'border-[#789A60] bg-[#F5F8F2]'
+                                        : 'border-[#E3E9E4] bg-white hover:border-[#AABBA2]' }}">
+
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24"
+                                                 fill="none" stroke="currentColor" stroke-width="1.7">
+                                                <circle cx="12" cy="8" r="4"/>
+                                                <path d="M4 21a8 8 0 0 1 16 0"/>
+                                            </svg>
+                                        </div>
+
+                                        <div>
+                                            <h5 class="text-sm font-bold text-[#172B3A]">
+                                                {{ $memberName }}
+                                            </h5>
+
+                                            <p class="mt-1 text-xs text-slate-500">
+                                                {{ strtoupper($member->member_type ?? '') }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        wire:click="selectMember({{ $member->id }})"
+                                        @click="step = 3"
+                                        class="h-10 rounded-lg px-5 text-xs font-semibold text-white transition
+                                            {{ $selectedMemberId == $member->id
+                                                ? 'bg-[#789A60]'
+                                                : 'bg-[#172B3A] hover:bg-[#243E50]' }}"
+                                    >
+                                        {{ $selectedMemberId == $member->id ? 'Selected' : 'Select Account' }}
+                                    </button>
+
+                                </div>
+
+                            @empty
+
+                                <div class="rounded-xl border border-dashed border-[#DCE2DF] px-5 py-10 text-center">
+                                    <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                        <svg class="h-6 w-6" viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" stroke-width="1.7">
+                                            <circle cx="11" cy="11" r="7"/>
+                                            <path d="m20 20-4-4"/>
+                                        </svg>
+                                    </div>
+
+                                    <p class="text-sm font-semibold text-[#172B3A]">
+                                        No matching account found
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-slate-500">
+                                        Please check the spelling or try another name.
+                                    </p>
+                                </div>
+
+                            @endforelse
+
+                        @else
+
+                            <div class="rounded-xl border border-dashed border-[#DCE2DF] px-5 py-10 text-center">
+                                <p class="text-sm font-medium text-slate-500">
+                                    Start typing to search for your account.
+                                </p>
+                                <p class="mt-1 text-xs text-slate-400">
+                                    Enter at least 2 characters.
+                                </p>
+                            </div>
+
+                        @endif
+
+                    </div>
+
+                    {{-- BACK --}}
+                    <button
+                        type="button"
+                        @click="step = 1"
+                        class="flex h-12 w-full items-center justify-center rounded-xl border border-[#DCE2DF] px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                    >
+                        Back
+                    </button>
+
+                </div>
+
+
+                {{-- ===================================== --}}
+                {{-- STEP 3: REGISTRATION DETAILS          --}}
+                {{-- ===================================== --}}
+                <div x-show="step === 3" x-cloak x-transition
+                     class="space-y-8 px-6 py-8 sm:px-8">
+
+                    {{-- SELECTED MEMBER --}}
+                    <div class="rounded-xl border border-[#DCE8D5] bg-[#F5F8F2] p-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-[#789A60]">
+                                    Selected Member Account
+                                </p>
+
+                                @if($selectedMember)
+                                    <p class="mt-1 text-sm font-bold text-[#172B3A]">
+                                        {{ $selectedMember->firstname }}
+                                        {{ $selectedMember->middlename }}
+                                        {{ $selectedMember->lastname }}
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-slate-500">
+                                        {{ strtoupper($selectedMember->member_type ?? '') }}
+                                    </p>
+                                @else
+                                    <p class="mt-1 text-sm text-red-500">
+                                        No member account selected.
+                                    </p>
+                                @endif
+                            </div>
+
+                            <button
+                                type="button"
+                                @click="step = 2"
+                                class="text-xs font-semibold text-[#789A60] hover:underline"
+                            >
+                                Change Account
+                            </button>
+                        </div>
                     </div>
 
                     {{-- ACCOUNT INFORMATION --}}
@@ -322,7 +562,6 @@
                                 <input
                                     type="text"
                                     name="account_number"
-                                    value="{{ old('account_number') }}"
                                     placeholder="Enter your account number"
                                     required
                                     class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
@@ -340,11 +579,10 @@
                                     placeholder="House number, street, barangay, municipality"
                                     required
                                     class="w-full rounded-xl border border-[#DCE2DF] px-4 py-3 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                >{{ old('address') }}</textarea>
+                                ></textarea>
                             </div>
                         </div>
                     </section>
-
 
                     {{-- RESIDENTIAL INFORMATION --}}
                     <section
@@ -374,9 +612,8 @@
                                     First Name <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" name="first_name"
-                                       value="{{ old('first_name') }}"
-                                       :required="classification === 'residential'"
                                        placeholder="First name"
+                                       required
                                        autocomplete="given-name"
                                        class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
                             </div>
@@ -386,7 +623,6 @@
                                     Middle Name
                                 </label>
                                 <input type="text" name="middle_name"
-                                       value="{{ old('middle_name') }}"
                                        placeholder="Middle name"
                                        class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
                             </div>
@@ -396,9 +632,8 @@
                                     Last Name <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" name="last_name"
-                                       value="{{ old('last_name') }}"
-                                       :required="classification === 'residential'"
                                        placeholder="Last name"
+                                       required
                                        autocomplete="family-name"
                                        class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
                             </div>
@@ -408,13 +643,11 @@
                                     Suffix
                                 </label>
                                 <input type="text" name="suffix"
-                                       value="{{ old('suffix') }}"
                                        placeholder="e.g. Jr., Sr., III"
                                        class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
                             </div>
                         </div>
                     </section>
-
 
                     {{-- JURIDICAL INFORMATION --}}
                     <section
@@ -448,8 +681,7 @@
                             <input
                                 type="text"
                                 name="organization_name"
-                                value="{{ old('organization_name') }}"
-                                :required="classification === 'juridical_public_building'"
+                                required
                                 placeholder="Enter organization or building name"
                                 class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
                             >
@@ -464,8 +696,7 @@
                                 <input
                                     type="text"
                                     name="representative_name"
-                                    value="{{ old('representative_name') }}"
-                                    :required="classification === 'juridical_public_building'"
+                                    required
                                     placeholder="Authorized representative"
                                     class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
                                 >
@@ -479,15 +710,13 @@
                                 <input
                                     type="text"
                                     name="representative_position"
-                                    value="{{ old('representative_position') }}"
-                                    :required="classification === 'juridical_public_building'"
+                                    required
                                     placeholder="e.g. Manager, Director"
                                     class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
                                 >
                             </div>
                         </div>
                     </section>
-
 
                     {{-- CONTACT INFORMATION --}}
                     <section>
@@ -515,7 +744,6 @@
                                 <input
                                     type="tel"
                                     name="mobile_number"
-                                    value="{{ old('mobile_number') }}"
                                     placeholder="09XX XXX XXXX"
                                     autocomplete="tel"
                                     required
@@ -531,7 +759,6 @@
                                 <input
                                     type="email"
                                     name="email"
-                                    value="{{ old('email') }}"
                                     placeholder="you@example.com"
                                     autocomplete="email"
                                     class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
@@ -539,7 +766,6 @@
                             </div>
                         </div>
                     </section>
-
 
                     {{-- CONSENT --}}
                     <div class="rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
@@ -562,13 +788,12 @@
                         </label>
                     </div>
 
-
                     {{-- ACTIONS --}}
                     <div class="flex flex-col-reverse gap-3 sm:flex-row">
 
                         <button
                             type="button"
-                            @click="step = 1"
+                            @click="step = 2"
                             class="flex h-12 items-center justify-center rounded-xl border border-[#DCE2DF] px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                         >
                             Back
@@ -592,6 +817,7 @@
                         Your registration will be subject to verification.
                     </p>
                 </div>
+
             </form>
         </div>
 
