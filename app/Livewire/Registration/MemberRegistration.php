@@ -6,6 +6,7 @@ use App\Models\Member;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\AgmaRegistration;
 
 #[Layout('components.layout.registration', ['title' => 'Member Registration'])]
 class MemberRegistration extends Component
@@ -15,10 +16,16 @@ class MemberRegistration extends Component
     public string $firstname = '';
     public string $middlename = '';
     public string $lastname = '';
-
+    public string $district = '';
+    public string $brgy = '';
+    public string $street = '';
+    public string $municipality = '';
     public ?string $selectedAccountNumber = null;
     public ?int $selectedMemberId = null;
     public ?string $dateOfBirth = null;
+    public bool $consentAccepted = false;
+    public bool $registrationSaved = false;
+    public string $membership_id = '';
 
     public bool $searchPerformed = false;
 
@@ -49,31 +56,36 @@ class MemberRegistration extends Component
             'selectedMemberId',
             'selectedAccountNumber',
             'searchPerformed',
+            'district',
+            'brgy',
+            'street',
+            'municipality',
         ]);
     }
 
     public function selectMember($id): void
     {
-        $member = Member::findOrFail($id);
+        // Check whether the selected record exists.
+        $member = Member::where('membership_id', $id)->first();
 
-        $type = strtoupper(trim($member->member_type ?? ''));
+        if (!$member) {
+            logger()->error('AGMA: Selected member not found', [
+                'received_id' => $id,
+            ]);
 
-        if (
-            $this->classification === 'residential'
-            && !in_array($type, ['SINGLE', 'JOINT'])
-        ) {
+            $this->addError('selectedMemberId', 'Member record not found.');
             return;
         }
 
-        if (
-            $this->classification === 'juridical_public_building'
-            && $type !== 'JURIDICAL'
-        ) {
-            return;
-        }
-
-        $this->selectedMemberId = $member->id;
+        $this->selectedMemberId = (int) $member->id;
         $this->selectedAccountNumber = null;
+
+        $this->district = $member->district ?? '';
+        $this->brgy = $member->brgy ?? '';
+        $this->street = $member->street ?? '';
+        $this->municipality = $member->municipality ?? '';
+
+        $this->resetErrorBag('selectedMemberId');
 
         $this->dispatch('member-selected');
     }
@@ -151,5 +163,53 @@ class MemberRegistration extends Component
             'accountOptions' => $accountOptions,
             'searchPerformed' => $this->searchPerformed,
         ]);
+    }
+
+    public function submitRegistration()
+    {
+        $this->validate([
+            'classification' => 'required|in:residential,juridical_public_building',
+            'selectedMemberId' => 'required',
+            'selectedAccountNumber' => 'required',
+            'dateOfBirth' => 'required|date',
+            'district' => 'nullable|string|max:255',
+            'brgy' => 'nullable|string|max:255',
+            'street' => 'nullable|string|max:255',
+            'municipality' => 'nullable|string|max:255',
+            'consentAccepted' => 'accepted',
+        ]);
+
+        $member = Member::findOrFail($this->selectedMemberId);
+
+        // Verify that the selected account belongs to this member.
+        $accountExists = DB::table('customer_details')
+            ->where('tracking_number', $member->membership_id)
+            ->where('c_id', $this->selectedAccountNumber)
+            ->exists();
+
+        if (!$accountExists) {
+            $this->addError(
+                'selectedAccountNumber',
+                'The selected account does not belong to this member.'
+            );
+
+            return;
+        }
+
+
+        AgmaRegistration::create([
+            'registration_type' => 'online_registration',
+            'classification' => $this->classification,
+            'membership_id' => $member->membership_id,
+            'account_number' => $this->selectedAccountNumber,
+            'district' => $this->district,
+            'brgy' => $this->brgy,
+            'street' => $this->street,
+            'municipality' => $this->municipality,
+            'date_of_birth' => $this->dateOfBirth,
+            'status' => 'pending',
+        ]);
+
+        $this->registrationSaved = true;
     }
 }
