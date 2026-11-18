@@ -15,6 +15,7 @@ class MembersData extends Component
     public $firstname = '';
     public $middlename = '';
     public $lastname = '';
+    public $membership_status = '';
 
     public function updating($property): void
     {
@@ -38,6 +39,9 @@ class MembersData extends Component
                 $value = trim($this->lastname);
 
                 $query->where('lastname', 'LIKE', '%' . $value . '%');
+            })
+            ->when($this->membership_status, function ($query) {
+                $query->where('membership_status', $this->membership_status);
             })
             ->orderBy('lastname')
             ->orderBy('firstname')
