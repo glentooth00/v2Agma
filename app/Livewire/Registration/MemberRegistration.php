@@ -7,12 +7,16 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\AgmaRegistration;
+use Livewire\WithFileUploads;
 
 #[Layout('components.layout.registration', ['title' => 'Member Registration'])]
 class MemberRegistration extends Component
 {
-    public string $classification = '';
 
+    use WithFileUploads;
+
+    public string $classification = '';
+    public $validId;
     public string $firstname = '';
     public string $middlename = '';
     public string $lastname = '';
@@ -177,6 +181,7 @@ class MemberRegistration extends Component
             'street' => 'nullable|string|max:255',
             'municipality' => 'nullable|string|max:255',
             'consentAccepted' => 'accepted',
+            'validId' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
         $member = Member::findOrFail($this->selectedMemberId);
@@ -196,6 +201,9 @@ class MemberRegistration extends Component
             return;
         }
 
+        // Save the uploaded ID file.
+        $validIdPath = $this->validId->store('valid-ids', 'public');
+
 
         AgmaRegistration::create([
             'registration_type' => 'online_registration',
@@ -208,8 +216,11 @@ class MemberRegistration extends Component
             'municipality' => $this->municipality,
             'date_of_birth' => $this->dateOfBirth,
             'status' => 'pending',
+            'valid_id_path' => $validIdPath,
         ]);
 
         $this->registrationSaved = true;
     }
+
+    
 }
