@@ -865,6 +865,47 @@
                     </div>
                 </section>
 
+                    <section>
+                    <div class="mb-5 flex items-center gap-3">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
+                            04
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-bold text-[#172B3A]">
+                                Valid ID Upload
+                            </h4>
+                            <p class="mt-1 text-xs text-slate-500">
+                                Upload valid valid identification documents for verification. Accepted formats: JPG, PNG, PDF. Maximum file size: 15MB.
+                            </p>
+                        </div>
+                    </div>
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                            Valid ID <span class="text-red-500">*</span>
+                        </label>
+
+                        <x-ui.file-upload
+                            name="validId"
+                            wire:model="validId"
+                            accept=".png,.jpg,.jpeg,.pdf"
+                            maxSizeLabel="PNG, JPG, JPEG or PDF (Max 5 MB)"
+                            required
+                        />
+
+                        @error('validId')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+
+                        <div wire:loading wire:target="validId" class="mt-2 text-xs text-[#789A60]">
+                            Uploading ID...
+                        </div>
+                    </div>
+                </div>
+
+                </section>
+
                {{-- CONSENT --}}
                 <div class="rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
                     <label class="flex cursor-pointer items-start gap-3">
