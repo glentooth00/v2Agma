@@ -4,7 +4,7 @@
     classification: @entangle('classification'),
     dateOfBirth: @entangle('dateOfBirth'),
     step: 1,
-    consentAccepted: false
+    consentAccepted: @entangle('consentAccepted')
     }"
     x-on:member-selected.window="step = 3"
     class="min-h-screen bg-[#F7F8F6]"
@@ -448,93 +448,113 @@
                         );
                 @endphp
 
-                @if($searchPerformed)
-                    <div wire:loading.remove wire:target="searchMember"
-                        class="overflow-hidden rounded-xl border border-[#E3E9E4]">
+            @if($searchPerformed)
+    <div wire:loading.remove wire:target="searchMember"
+        class="overflow-hidden rounded-xl border border-[#E3E9E4]">
 
-                        <div class="border-b border-[#E9EDE9] bg-[#F8FAF8] px-4 py-3">
-                            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
-                                Matching Member Records
-                            </p>
-                        </div>
+        <div class="border-b border-[#E9EDE9] bg-[#F8FAF8] px-4 py-3">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Matching Member Records
+            </p>
+        </div>
 
-                        @forelse($members as $member)
-                            <button
-                                type="button"
-                                wire:key="registration-member-{{ $member->id }}"
-                                wire:click="selectMember({{ $member->id }})"
-                                class="flex w-full items-center justify-between gap-4 border-b border-[#EEF1EE] px-4 py-4 text-left transition last:border-b-0 hover:bg-[#F5F8F2]"
-                            >
-                                <div class="flex min-w-0 items-center gap-3">
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
-                                        <svg class="h-5 w-5" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor"
-                                            stroke-width="1.7">
-                                            <circle cx="12" cy="8" r="4"/>
-                                            <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
-                                        </svg>
-                                    </div>
+        @forelse($members as $member)
+            <button
+                type="button"
+                wire:key="registration-member-{{ $member->membership_id }}"
+                wire:click="selectMember('{{ $member->membership_id }}')"
+                wire:loading.attr="disabled"
+                wire:target="selectMember"
+                class="flex w-full items-center justify-between gap-4 border-b border-[#EEF1EE] px-4 py-4 text-left transition last:border-b-0 hover:bg-[#F5F8F2] disabled:cursor-wait disabled:opacity-60"
+            >
+                {{-- MEMBERSHIP ID --}}
+                <p class="text-xs text-blue-600">
+                    Membership ID: {{ $member->membership_id }}
+                </p>
 
-                                    <div class="min-w-0">
-                                        <p class="truncate text-sm font-bold text-[#172B3A]">
-                                            {{ $member->firstname }}
-                                            @if($member->middlename)
-                                                {{ $member->middlename }}
-                                            @endif
-                                            {{ $member->lastname }}
-                                        </p>
-                                        <p class="mt-1 text-xs text-slate-500">
-                                            {{ $member->member_type ?? 'Member' }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-[#789A60]">
-                                    Select
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path d="m9 18 6-6-6-6"/>
-                                    </svg>
-                                </span>
-                            </button>
-                        @empty
-                            <div class="px-5 py-10 text-center">
-                                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-                                    <svg class="h-6 w-6" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor"
-                                        stroke-width="1.7">
-                                        <circle cx="11" cy="11" r="7"/>
-                                        <path d="m20 20-4-4"/>
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-semibold text-[#172B3A]">
-                                    No matching member found
-                                </p>
-                                <p class="mt-1 text-xs text-slate-500">
-                                    Check the spelling or try another name.
-                                </p>
-                            </div>
-                        @endforelse
+                <div class="flex min-w-0 items-center gap-3">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor"
+                            stroke-width="1.7">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+                        </svg>
                     </div>
-                @else
-                    <div class="rounded-xl border border-dashed border-[#DCE2DF] bg-[#FAFBFA] px-5 py-10 text-center">
-                        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
-                            <svg class="h-6 w-6" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor"
-                                stroke-width="1.7">
-                                <circle cx="11" cy="11" r="7"/>
-                                <path d="m20 20-4-4"/>
-                            </svg>
-                        </div>
-                        <p class="text-sm font-semibold text-[#172B3A]">
-                            Search for your account
+
+                    <div class="min-w-0">
+                        <p class="truncate text-sm font-bold text-[#172B3A]">
+                            {{ $member->firstname }}
+                            @if($member->middlename)
+                                {{ $member->middlename }}
+                            @endif
+                            {{ $member->lastname }}
                         </p>
+
                         <p class="mt-1 text-xs text-slate-500">
-                            Enter your name and click Search Member to find your record.
+                            {{ $member->member_type ?? 'Member' }}
                         </p>
                     </div>
-                @endif
+                </div>
+
+                <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-[#789A60]">
+                    <span wire:loading.remove wire:target="selectMember">
+                        Select
+                    </span>
+
+                    <span wire:loading wire:target="selectMember">
+                        Selecting...
+                    </span>
+
+                    <svg wire:loading.remove wire:target="selectMember"
+                        class="h-4 w-4" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                </span>
+            </button>
+        @empty
+            <div class="px-5 py-10 text-center">
+                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                    <svg class="h-6 w-6" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor"
+                        stroke-width="1.7">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="m20 20-4-4"/>
+                    </svg>
+                </div>
+
+                <p class="text-sm font-semibold text-[#172B3A]">
+                    No matching member found
+                </p>
+
+                <p class="mt-1 text-xs text-slate-500">
+                    Check the spelling or try another name.
+                </p>
+            </div>
+        @endforelse
+    </div>
+@else
+    <div class="rounded-xl border border-dashed border-[#DCE2DF] bg-[#FAFBFA] px-5 py-10 text-center">
+        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
+            <svg class="h-6 w-6" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor"
+                stroke-width="1.7">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="m20 20-4-4"/>
+            </svg>
+        </div>
+
+        <p class="text-sm font-semibold text-[#172B3A]">
+            Search for your account
+        </p>
+
+        <p class="mt-1 text-xs text-slate-500">
+            Enter your name and click Search Member to find your record.
+        </p>
+    </div>
+@endif
 
                 <div class="flex items-center justify-between border-t border-[#E9EDE9] pt-5">
                     <button
@@ -721,6 +741,13 @@
                                 {{ $selectedMember->complete_address?? '—' }}
                             </p>
                         </div>
+                        {{-- HIDDEN ADDRESS INFORMATION --}}
+                        <div hidden>
+                            <input type="hidden" wire:model="district">
+                            <input type="hidden" wire:model="brgy">
+                            <input type="hidden" wire:model="street">
+                            <input type="hidden" wire:model="municipality">
+                        </div>
 
                     </div>
                 @endif
@@ -843,10 +870,8 @@
                     <label class="flex cursor-pointer items-start gap-3">
                         <input
                             type="checkbox"
-                            name="consent"
-                            value="1"
                             x-model="consentAccepted"
-                            class="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#789A60]"
+                            class="mt-1 rounded border-slate-300 text-[#789A60] focus:ring-[#789A60]"
                         >
 
                         <span class="text-xs leading-6 text-slate-600">
@@ -859,6 +884,19 @@
                     </label>
                 </div>
 
+                @if ($errors->any())
+                    <div class="rounded-xl border border-red-200 bg-red-50 p-4">
+                        <p class="mb-2 text-sm font-bold text-red-700">
+                            Please correct the following:
+                        </p>
+
+                        <ul class="list-inside list-disc space-y-1 text-xs text-red-600">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 {{-- ACTIONS --}}
                 <div class="flex flex-col-reverse gap-3 sm:flex-row">
                     <button
@@ -871,15 +909,22 @@
 
                     <button
                         type="button"
+                        wire:click="submitRegistration"
+                        wire:loading.attr="disabled"
+                        wire:target="submitRegistration"
                         :disabled="!dateOfBirth || !consentAccepted"
-                        class="cursor-pointer flex min-h-14 flex-1 items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#172B3A]/10 transition hover:bg-[#243E50] disabled:cursor-not-allowed disabled:opacity-40"
+                        :class="(!dateOfBirth || !consentAccepted)
+                            ? 'cursor-not-allowed bg-slate-300 text-slate-500 shadow-none'
+                            : 'cursor-pointer bg-[#172B3A] text-white hover:bg-[#243F52] shadow-md'"
+                        class="inline-flex w-full items-center justify-center rounded-xl px-6 py-3 text-sm font-bold transition duration-200 disabled:cursor-not-allowed"
                     >
-                        Submit Registration
+                        <span wire:loading.remove wire:target="submitRegistration">
+                            Submit Registration
+                        </span>
 
-                        <svg class="h-4 w-4" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14m-6-6 6 6-6 6"/>
-                        </svg>
+                        <span wire:loading wire:target="submitRegistration">
+                            Submitting...
+                        </span>
                     </button>
                 </div>
                 <p class="text-center text-xs leading-5 text-slate-400">
