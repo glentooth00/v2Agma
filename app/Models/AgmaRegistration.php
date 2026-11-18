@@ -18,6 +18,7 @@ class AgmaRegistration extends Model
         'municipality',
         'date_of_birth',
         'status',
+        'valid_id_path',
     ];
 
     public function member(): BelongsTo
