@@ -1,10 +1,13 @@
 
 <div
     x-data="{
-        classification: @entangle('classification'),
-        step: 1
+    classification: @entangle('classification'),
+    dateOfBirth: @entangle('dateOfBirth'),
+    step: 1,
+    consentAccepted: false
     }"
-    class="min-h-screen"
+    x-on:member-selected.window="step = 3"
+    class="min-h-screen bg-[#F7F8F6]"
 >
     {{-- HEADER --}}
     <header class="border-b border-[#E5EAE5] bg-white">
@@ -32,12 +35,11 @@
 
             <div class="hidden items-center gap-2 text-xs font-medium text-slate-500 sm:flex">
                 <span class="h-2 w-2 rounded-full bg-[#8BAF72]"></span>
-                Official AGM Registration
+                Official AGMA Registration
             </div>
         </div>
     </header>
 
-    {{-- PAGE CONTENT --}}
     <main class="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
 
         {{-- INTRO --}}
@@ -65,55 +67,86 @@
             </p>
         </div>
 
-        {{-- PROGRESS --}}
-        <div class="mb-6 flex items-center justify-center gap-2 sm:gap-3">
 
-            <div class="flex items-center gap-2">
-                <span class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
-                      :class="step === 1 ? 'bg-[#172B3A] text-white' : 'bg-[#789A60] text-white'">
+        {{-- PROGRESS --}}
+        <div class="mb-6 flex w-full items-center justify-center gap-2 sm:gap-3">
+
+            {{-- STEP 1 --}}
+            <div class="flex min-w-0 items-center gap-2">
+                <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold sm:h-8 sm:w-8 sm:text-xs"
+                    :class="step === 1
+                        ? 'bg-[#172B3A] text-white'
+                        : 'bg-[#789A60] text-white'"
+                >
                     <span x-show="step === 1">1</span>
                     <svg x-show="step > 1" x-cloak class="h-4 w-4"
-                         viewBox="0 0 20 20" fill="currentColor">
+                        viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
-                              d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
-                              clip-rule="evenodd"/>
+                            d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
+                            clip-rule="evenodd"/>
                     </svg>
                 </span>
-                <span class="hidden text-xs font-semibold text-[#172B3A] sm:inline">
+
+                <span class="text-[10px] font-semibold text-[#172B3A] sm:text-xs whitespace-nowrap">
                     Account Type
                 </span>
             </div>
 
-            <div class="h-px w-5 bg-slate-300 sm:w-10"></div>
+            {{-- CONNECTOR --}}
+            <div class="h-px w-4 shrink-0 bg-slate-300 sm:w-8"></div>
 
-            <div class="flex items-center gap-2">
-                <span class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
-                      :class="step === 2 ? 'bg-[#172B3A] text-white' : step === 3 ? 'bg-[#789A60] text-white' : 'bg-slate-200 text-slate-500'">
-                    <span x-show="step < 3">2</span>
-                    <svg x-show="step === 3" x-cloak class="h-4 w-4"
-                         viewBox="0 0 20 20" fill="currentColor">
+            {{-- STEP 2 --}}
+            <div class="flex min-w-0 items-center gap-2">
+                <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold sm:h-8 sm:w-8 sm:text-xs"
+                    :class="step === 2
+                        ? 'bg-[#172B3A] text-white'
+                        : step > 2
+                            ? 'bg-[#789A60] text-white'
+                            : 'bg-slate-200 text-slate-500'"
+                >
+                    <span x-show="step <= 2">2</span>
+                    <svg x-show="step > 2" x-cloak class="h-4 w-4"
+                        viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
-                              d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
-                              clip-rule="evenodd"/>
+                            d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
+                            clip-rule="evenodd"/>
                     </svg>
                 </span>
-                <span class="hidden text-xs font-semibold text-slate-500 sm:inline">
+
+                <span
+                    class="text-[10px] font-semibold whitespace-nowrap sm:text-xs"
+                    :class="step >= 2 ? 'text-[#172B3A]' : 'text-slate-500'"
+                >
                     Find Account
                 </span>
             </div>
 
-            <div class="h-px w-5 bg-slate-300 sm:w-10"></div>
+            {{-- CONNECTOR --}}
+            <div class="h-px w-4 shrink-0 bg-slate-300 sm:w-8"></div>
 
-            <div class="flex items-center gap-2">
-                <span class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
-                      :class="step === 3 ? 'bg-[#172B3A] text-white' : 'bg-slate-200 text-slate-500'">
+            {{-- STEP 3 --}}
+            <div class="flex min-w-0 items-center gap-2">
+                <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold sm:h-8 sm:w-8 sm:text-xs"
+                    :class="step === 3
+                        ? 'bg-[#172B3A] text-white'
+                        : 'bg-slate-200 text-slate-500'"
+                >
                     3
                 </span>
-                <span class="hidden text-xs font-semibold text-slate-500 sm:inline">
+
+                <span
+                    class="text-[10px] font-semibold whitespace-nowrap sm:text-xs"
+                    :class="step === 3 ? 'text-[#172B3A]' : 'text-slate-500'"
+                >
                     Registration
                 </span>
             </div>
+
         </div>
+
 
         {{-- REGISTRATION CARD --}}
         <div class="overflow-hidden rounded-2xl border border-[#E3E9E4] bg-white shadow-sm">
@@ -121,704 +154,739 @@
             {{-- CARD HEADER --}}
             <div class="border-b border-[#E9EDE9] px-6 py-5 sm:px-8">
                 <h3 class="font-semibold text-[#172B3A]"
-                    x-text="step === 1
-                        ? 'Select Account Classification'
-                        : step === 2
-                            ? 'Find Your Member Account'
-                            : 'Registration Information'">
+                    x-text="
+                        step === 1
+                            ? 'Select Account Classification'
+                            : step === 2
+                                ? 'Find Your Member Account'
+                                : 'Registration Information'
+                    ">
                 </h3>
 
                 <p class="mt-1 text-xs text-slate-500"
-                   x-text="step === 1
-                    ? 'Choose the classification that matches your electric service account.'
-                    : step === 2
-                        ? 'Search and select your existing member-consumer record.'
-                        : 'Complete the required information below.'">
+                   x-text="
+                        step === 1
+                            ? 'Choose the classification that matches your electric service account.'
+                            : step === 2
+                                ? 'Search and select your existing cooperative member record.'
+                                : 'Complete the required information below.'
+                   ">
                 </p>
             </div>
 
-            <form wire:submit.prevent="submit">
+            {{-- ===================================== --}}
+            {{-- STEP 1: ACCOUNT CLASSIFICATION       --}}
+            {{-- ===================================== --}}
+            <div x-show="step === 1" x-transition
+                 class="space-y-6 px-6 py-8 sm:px-8">
 
-                {{-- ===================================== --}}
-                {{-- STEP 1: ACCOUNT CLASSIFICATION       --}}
-                {{-- ===================================== --}}
-                <div x-show="step === 1" x-transition
-                     class="space-y-6 px-6 py-8 sm:px-8">
+                <div class="text-center">
+                    <h4 class="text-lg font-bold text-[#172B3A]">
+                        What type of account do you have?
+                    </h4>
+                    <p class="mt-2 text-sm text-slate-500">
+                        Please select one option to continue.
+                    </p>
+                </div>
 
-                    <div class="text-center">
-                        <h4 class="text-lg font-bold text-[#172B3A]">
-                            What type of account do you have?
-                        </h4>
-                        <p class="mt-2 text-sm text-slate-500">
-                            Please select one option to continue.
+                <div class="grid gap-5 sm:grid-cols-2">
+
+                    {{-- RESIDENTIAL --}}
+                    <label class="relative cursor-pointer">
+                        <input
+                            type="radio"
+                            name="account_classification"
+                            value="residential"
+                            x-model="classification"
+                            class="peer sr-only"
+                        >
+
+                        <div class="h-full rounded-2xl border-2 border-[#E3E9E4] p-6 transition
+                            peer-checked:border-[#789A60]
+                            peer-checked:bg-[#F5F8F2]
+                            hover:border-[#AABBA2]">
+
+                            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-[#EAF0E6] text-[#789A60]">
+                                <svg class="h-7 w-7" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor"
+                                     stroke-width="1.7">
+                                    <path d="m3 10 9-7 9 7"/>
+                                    <path d="M5 9v12h14V9M9 21v-7h6v7"/>
+                                </svg>
+                            </div>
+
+                            <h5 class="text-lg font-bold text-[#172B3A]">
+                                Residential
+                            </h5>
+
+                            <p class="mt-2 text-sm leading-6 text-slate-500">
+                                For individual household member-consumers
+                                with residential electric service accounts.
+                            </p>
+
+                            <p class="mt-4 text-xs font-semibold text-[#789A60]">
+                                Individual / Household Account
+                            </p>
+                        </div>
+                    </label>
+
+                    {{-- JURIDICAL --}}
+                    <label class="relative cursor-pointer">
+                        <input
+                            type="radio"
+                            name="account_classification"
+                            value="juridical_public_building"
+                            x-model="classification"
+                            class="peer sr-only"
+                        >
+
+                        <div class="h-full rounded-2xl border-2 border-[#E3E9E4] p-6 transition
+                            peer-checked:border-[#365D7A]
+                            peer-checked:bg-[#F3F7FA]
+                            hover:border-[#AABBA2]">
+
+                            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-[#E9EFF5] text-[#365D7A]">
+                                <svg class="h-7 w-7" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor"
+                                     stroke-width="1.7">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <path d="M9 21V9h6v12M7 7h.01M17 7h.01M7 11h.01M17 11h.01M7 15h.01M17 15h.01"/>
+                                </svg>
+                            </div>
+
+                            <h5 class="text-lg font-bold text-[#172B3A]">
+                                Juridical / Public Building
+                            </h5>
+
+                            <p class="mt-2 text-sm leading-6 text-slate-500">
+                                For organizations, companies, institutions,
+                                government offices, and public buildings.
+                            </p>
+
+                            <p class="mt-4 text-xs font-semibold text-[#365D7A]">
+                                Organization / Establishment Account
+                            </p>
+                        </div>
+                    </label>
+                </div>
+
+                <p x-show="!classification" x-cloak
+                   class="text-center text-xs text-slate-400">
+                    Select an account type to enable the Continue button.
+                </p>
+
+                <button
+                    type="button"
+                    @click="if (classification) step = 2"
+                    :disabled="!classification"
+                    class="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 text-sm font-semibold text-white transition hover:bg-[#243E50] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                    Continue
+                    <svg class="h-4 w-4" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m-6-6 6 6-6 6"/>
+                    </svg>
+                </button>
+            </div>
+
+            {{-- ===================================== --}}
+            {{-- STEP 2: FIND MEMBER ACCOUNT           --}}
+            {{-- ===================================== --}}
+            <div x-show="step === 2" x-cloak x-transition
+                 class="space-y-6 px-6 py-8 sm:px-8">
+
+                {{-- SELECTED ACCOUNT TYPE --}}
+                <div class="flex items-center justify-between rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Selected Account Type
+                        </p>
+                        <p class="mt-1 text-sm font-bold text-[#172B3A]"
+                           x-text="classification === 'residential'
+                                ? 'Residential'
+                                : 'Juridical / Public Building'">
                         </p>
                     </div>
 
-                    <div class="grid gap-5 sm:grid-cols-2">
-
-                        {{-- RESIDENTIAL --}}
-                        <label class="relative cursor-pointer">
-                            <input
-                                type="radio"
-                                name="account_classification"
-                                value="residential"
-                                x-model="classification"
-                                class="peer sr-only"
-                            >
-
-                            <div class="h-full rounded-2xl border-2 border-[#E3E9E4] p-6 transition
-                                peer-checked:border-[#789A60]
-                                peer-checked:bg-[#F5F8F2]
-                                hover:border-[#AABBA2]">
-
-                                <div class="mb-5 flex items-center justify-between">
-                                    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#EAF0E6] text-[#789A60]">
-                                        <svg class="h-7 w-7" viewBox="0 0 24 24"
-                                             fill="none" stroke="currentColor"
-                                             stroke-width="1.7">
-                                            <path d="m3 10 9-7 9 7"/>
-                                            <path d="M5 9v12h14V9M9 21v-7h6v7"/>
-                                        </svg>
-                                    </div>
-
-                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-slate-300 text-transparent peer-checked:border-[#789A60] peer-checked:bg-[#789A60] peer-checked:text-white">
-                                        <svg class="h-4 w-4" viewBox="0 0 20 20"
-                                             fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                  d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
-                                                  clip-rule="evenodd"/>
-                                        </svg>
-                                    </span>
-                                </div>
-
-                                <h5 class="text-lg font-bold text-[#172B3A]">
-                                    Residential
-                                </h5>
-
-                                <p class="mt-2 text-sm leading-6 text-slate-500">
-                                    For individual household member-consumers
-                                    with residential electric service accounts.
-                                </p>
-
-                                <p class="mt-4 text-xs font-semibold text-[#789A60]">
-                                    Individual / Household Account
-                                </p>
-                                <p class="mt-1 text-xs text-slate-400">
-                                    Single or Joint
-                                </p>
-                            </div>
-                        </label>
-
-                        {{-- JURIDICAL --}}
-                        <label class="relative cursor-pointer">
-                            <input
-                                type="radio"
-                                name="account_classification"
-                                value="juridical_public_building"
-                                x-model="classification"
-                                class="peer sr-only"
-                            >
-
-                            <div class="h-full rounded-2xl border-2 border-[#E3E9E4] p-6 transition
-                                peer-checked:border-[#365D7A]
-                                peer-checked:bg-[#F3F7FA]
-                                hover:border-[#AABBA2]">
-
-                                <div class="mb-5 flex items-center justify-between">
-                                    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#E9EFF5] text-[#365D7A]">
-                                        <svg class="h-7 w-7" viewBox="0 0 24 24"
-                                             fill="none" stroke="currentColor"
-                                             stroke-width="1.7">
-                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                            <path d="M9 21V9h6v12M7 7h.01M17 7h.01M7 11h.01M17 11h.01M7 15h.01M17 15h.01"/>
-                                        </svg>
-                                    </div>
-
-                                    <span class="flex h-6 w-6 items-center justify-center rounded-full border border-slate-300 text-transparent peer-checked:border-[#365D7A] peer-checked:bg-[#365D7A] peer-checked:text-white">
-                                        <svg class="h-4 w-4" viewBox="0 0 20 20"
-                                             fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                  d="M16.7 5.3a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 1 1 1.4-1.4L9 11.6l6.3-6.3a1 1 0 0 1 1.4 0Z"
-                                                  clip-rule="evenodd"/>
-                                        </svg>
-                                    </span>
-                                </div>
-
-                                <h5 class="text-lg font-bold text-[#172B3A]">
-                                    Juridical / Public Building
-                                </h5>
-
-                                <p class="mt-2 text-sm leading-6 text-slate-500">
-                                    For organizations, companies, institutions,
-                                    government offices, and public buildings.
-                                </p>
-
-                                <p class="mt-4 text-xs font-semibold text-[#365D7A]">
-                                    Organization / Establishment Account
-                                </p>
-                            </div>
-                        </label>
-
-                    </div>
-
-                    <p x-show="!classification" x-cloak
-                       class="text-center text-xs text-slate-400">
-                        Select an account type to enable the Continue button.
-                    </p>
-
-                    <button
-                        type="button"
-                        @click="
-                            if (classification) {
-                                $wire.set('classification', classification);
-                                step = 2;
-                            }
-                        "
-                        :disabled="!classification"
-                        class="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 text-sm font-semibold text-white transition hover:bg-[#243E50] disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                        Continue
-                        <svg class="h-4 w-4" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14m-6-6 6 6-6 6"/>
-                        </svg>
+                    <button type="button"
+                            @click="step = 1"
+                            class="text-xs font-semibold text-[#789A60] hover:underline">
+                        Change
                     </button>
                 </div>
 
+                {{-- SEARCH INSTRUCTIONS --}}
+                <div>
+                    <h4 class="text-base font-bold text-[#172B3A]">
+                        Search for your member record
+                    </h4>
+                    <p class="mt-1 text-sm leading-6 text-slate-500">
+                        Enter your name as registered with the cooperative.
+                        Select your record from the search results.
+                    </p>
+                </div>
 
-                {{-- ===================================== --}}
-                {{-- STEP 2: FIND MEMBER ACCOUNT           --}}
-                {{-- ===================================== --}}
-                <div x-show="step === 2" x-cloak x-transition
-                     class="space-y-6 px-6 py-8 sm:px-8">
+                {{-- RESIDENTIAL SEARCH --}}
+                <div x-show="classification === 'residential'" class="space-y-5">
 
+
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    {{-- First Name --}}
                     <div>
-                        <h4 class="text-lg font-bold text-[#172B3A]">
-                            Find Your Member Account
-                        </h4>
-                        <p class="mt-2 text-sm text-slate-500">
-                            Search for your existing member-consumer record to continue.
-                        </p>
+                        <label class="mb-2 block text-sm font-medium text-slate-700">
+                            First Name
+                        </label>
+                        <input
+                            type="text"
+                            wire:model="firstname"
+                            placeholder="Enter first name"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-[#789A60] focus:ring-[#789A60]"
+                        >
                     </div>
 
-                    {{-- SELECTED CLASSIFICATION --}}
-                    <div class="flex items-center justify-between rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
-                        <div>
-                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                Account Classification
-                            </p>
+                    {{-- Middle Name --}}
+                    <div>
+                        <label class="mb-2 block text-sm font-medium text-slate-700">
+                            Middle Name
+                        </label>
+                        <input
+                            type="text"
+                            wire:model="middlename"
+                            placeholder="Enter middle name"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-[#789A60] focus:ring-[#789A60]"
+                        >
+                    </div>
 
-                            <p class="mt-1 text-sm font-bold text-[#172B3A]"
-                               x-text="classification === 'residential'
-                                    ? 'Residential'
-                                    : 'Juridical / Public Building'">
+                    {{-- Last Name --}}
+                    <div>
+                        <label class="mb-2 block text-sm font-medium text-slate-700">
+                            Last Name
+                        </label>
+                        <input
+                            type="text"
+                            wire:model="lastname"
+                            placeholder="Enter last name"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-[#789A60] focus:ring-[#789A60]"
+                        >
+                    </div>
+                </div>
+
+                {{-- Search Button --}}
+<div class="mt-4 flex justify-end">
+    <button
+        type="button"
+        wire:click="searchMember"
+        wire:loading.attr="disabled"
+        wire:target="searchMember"
+        class="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#789A60] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#66864F] disabled:opacity-60 sm:w-auto"
+    >
+        <span wire:loading.remove wire:target="searchMember">
+            <x-lucide-search class="h-4 w-4" />
+        </span>
+
+        <span wire:loading wire:target="searchMember">
+            <x-lucide-loader-circle class="h-4 w-4 animate-spin" />
+        </span>
+
+        <span wire:loading.remove wire:target="searchMember">Search Member</span>
+        <span wire:loading wire:target="searchMember">Searching...</span>
+    </button>
+</div>
+
+
+                    {{-- CLEAR SEARCH --}}
+                    <div class="flex justify-end">
+                        <button
+                            type="button"
+                            wire:click="$set('firstname', '')"
+                            class="text-xs font-semibold text-slate-500 hover:text-[#789A60]"
+                        >
+                            Clear first name
+                        </button>
+                        <button
+                            type="button"
+                            wire:click="clearSearch"
+                            class="ml-4 text-xs font-semibold text-[#789A60] hover:underline"
+                        >
+                            Clear all fields
+                        </button>
+                    </div>
+                </div>
+
+                {{-- JURIDICAL SEARCH --}}
+                <div x-show="classification === 'juridical_public_building'"
+                     x-cloak>
+                    <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                        Organization / Establishment Name
+                    </label>
+                    <div class="relative">
+                        <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                             viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.8">
+                            <circle cx="11" cy="11" r="7"/>
+                            <path d="m20 20-4-4"/>
+                        </svg>
+                        <input
+                            type="text"
+                            wire:model="firstname"
+                            placeholder="Enter organization name"
+                            autocomplete="off"
+                            class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white pl-10 pr-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
+                        >
+                    </div>
+                </div>
+
+
+                @php
+                    $hasSearch = trim($firstname ?? '') !== ''
+                        || (
+                            $classification === 'residential'
+                            && (
+                                trim($middlename ?? '') !== ''
+                                || trim($lastname ?? '') !== ''
+                            )
+                        );
+                @endphp
+
+                @if($searchPerformed)
+                    <div wire:loading.remove wire:target="searchMember"
+                        class="overflow-hidden rounded-xl border border-[#E3E9E4]">
+
+                        <div class="border-b border-[#E9EDE9] bg-[#F8FAF8] px-4 py-3">
+                            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                                Matching Member Records
                             </p>
                         </div>
 
-                        <button type="button"
-                                @click="step = 1"
-                                class="text-xs font-semibold text-[#789A60] hover:underline">
-                            Change
-                        </button>
-                    </div>
-
-
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-
-        {{-- First Name --}}
-        <div>
-            <label class="mb-2 block text-sm font-semibold text-[#172B3A]">
-                First Name
-            </label>
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="firstname"
-                placeholder="Enter first name"
-                class="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/20"
-            >
-        </div>
-
-        {{-- Middle Name --}}
-        <div>
-            <label class="mb-2 block text-sm font-semibold text-[#172B3A]">
-                Middle Name
-            </label>
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="middlename"
-                placeholder="Enter middle name"
-                @disabled($classification !== 'residential')
-                class="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/20 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
-            >
-        </div>
-
-        {{-- Last Name --}}
-        <div>
-            <label class="mb-2 block text-sm font-semibold text-[#172B3A]">
-                Last Name
-            </label>
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="lastname"
-                placeholder="Enter last name"
-                @disabled($classification !== 'residential')
-                class="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#789A60] focus:ring-2 focus:ring-[#789A60]/20 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
-            >
-        </div>
-
-    </div>
-
-
-    <p class="text-xs text-slate-400">
-        <span x-show="classification === 'residential'">
-            Enter any combination of first, middle, and last name to find your account.
-        </span>
-
-        <span x-show="classification === 'juridical_public_building'">
-            For juridical accounts, search using the First Name field only.
-        </span>
-    </p>
-
-                    {{-- LOADING --}}
-                    <div wire:loading.delay wire:target="search"
-                         class="flex items-center gap-2 text-xs font-medium text-[#789A60]">
-                        <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24"
-                             fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10" opacity=".25"/>
-                            <path d="M22 12a10 10 0 0 1-10 10"/>
-                        </svg>
-                        Searching accounts...
-                    </div>
-
-                    {{-- SEARCH RESULTS --}}
-                    <div class="space-y-3" wire:loading.remove wire:target="search">
-
-                        @if(strlen(trim($search ?? '')) >= 2)
-
-                            @forelse($members as $member)
-
-                                @php
-                                    $memberName = trim(
-                                        ($member->firstname ?? '') . ' ' .
-                                        ($member->middlename ?? '') . ' ' .
-                                        ($member->lastname ?? '')
-                                    );
-                                @endphp
-
-                                <div wire:key="member-result-{{ $member->id }}"
-                                     class="flex flex-col gap-3 rounded-xl border p-4 transition sm:flex-row sm:items-center sm:justify-between
-                                     {{ $selectedMemberId == $member->id
-                                        ? 'border-[#789A60] bg-[#F5F8F2]'
-                                        : 'border-[#E3E9E4] bg-white hover:border-[#AABBA2]' }}">
-
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
-                                            <svg class="h-5 w-5" viewBox="0 0 24 24"
-                                                 fill="none" stroke="currentColor" stroke-width="1.7">
-                                                <circle cx="12" cy="8" r="4"/>
-                                                <path d="M4 21a8 8 0 0 1 16 0"/>
-                                            </svg>
-                                        </div>
-
-                                        <div>
-                                            <h5 class="text-sm font-bold text-[#172B3A]">
-                                                {{ $memberName }}
-                                            </h5>
-
-                                            <p class="mt-1 text-xs text-slate-500">
-                                                {{ strtoupper($member->member_type ?? '') }}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        wire:click="selectMember({{ $member->id }})"
-                                        @click="step = 3"
-                                        class="h-10 rounded-lg px-5 text-xs font-semibold text-white transition
-                                            {{ $selectedMemberId == $member->id
-                                                ? 'bg-[#789A60]'
-                                                : 'bg-[#172B3A] hover:bg-[#243E50]' }}"
-                                    >
-                                        {{ $selectedMemberId == $member->id ? 'Selected' : 'Select Account' }}
-                                    </button>
-
-                                </div>
-
-                            @empty
-
-                                <div class="rounded-xl border border-dashed border-[#DCE2DF] px-5 py-10 text-center">
-                                    <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-                                        <svg class="h-6 w-6" viewBox="0 0 24 24"
-                                             fill="none" stroke="currentColor" stroke-width="1.7">
-                                            <circle cx="11" cy="11" r="7"/>
-                                            <path d="m20 20-4-4"/>
+                        @forelse($members as $member)
+                            <button
+                                type="button"
+                                wire:key="registration-member-{{ $member->id }}"
+                                wire:click="selectMember({{ $member->id }})"
+                                class="flex w-full items-center justify-between gap-4 border-b border-[#EEF1EE] px-4 py-4 text-left transition last:border-b-0 hover:bg-[#F5F8F2]"
+                            >
+                                <div class="flex min-w-0 items-center gap-3">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
+                                        <svg class="h-5 w-5" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor"
+                                            stroke-width="1.7">
+                                            <circle cx="12" cy="8" r="4"/>
+                                            <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
                                         </svg>
                                     </div>
 
-                                    <p class="text-sm font-semibold text-[#172B3A]">
-                                        No matching account found
-                                    </p>
-
-                                    <p class="mt-1 text-xs text-slate-500">
-                                        Please check the spelling or try another name.
-                                    </p>
+                                    <div class="min-w-0">
+                                        <p class="truncate text-sm font-bold text-[#172B3A]">
+                                            {{ $member->firstname }}
+                                            @if($member->middlename)
+                                                {{ $member->middlename }}
+                                            @endif
+                                            {{ $member->lastname }}
+                                        </p>
+                                        <p class="mt-1 text-xs text-slate-500">
+                                            {{ $member->member_type ?? 'Member' }}
+                                        </p>
+                                    </div>
                                 </div>
 
-                            @endforelse
-
-                        @else
-
-                            <div class="rounded-xl border border-dashed border-[#DCE2DF] px-5 py-10 text-center">
-                                <p class="text-sm font-medium text-slate-500">
-                                    Start typing to search for your account.
+                                <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-[#789A60]">
+                                    Select
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="m9 18 6-6-6-6"/>
+                                    </svg>
+                                </span>
+                            </button>
+                        @empty
+                            <div class="px-5 py-10 text-center">
+                                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                    <svg class="h-6 w-6" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor"
+                                        stroke-width="1.7">
+                                        <circle cx="11" cy="11" r="7"/>
+                                        <path d="m20 20-4-4"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-semibold text-[#172B3A]">
+                                    No matching member found
                                 </p>
-                                <p class="mt-1 text-xs text-slate-400">
-                                    Enter at least 2 characters.
+                                <p class="mt-1 text-xs text-slate-500">
+                                    Check the spelling or try another name.
                                 </p>
                             </div>
-
-                        @endif
-
+                        @endforelse
                     </div>
+                @else
+                    <div class="rounded-xl border border-dashed border-[#DCE2DF] bg-[#FAFBFA] px-5 py-10 text-center">
+                        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor"
+                                stroke-width="1.7">
+                                <circle cx="11" cy="11" r="7"/>
+                                <path d="m20 20-4-4"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-semibold text-[#172B3A]">
+                            Search for your account
+                        </p>
+                        <p class="mt-1 text-xs text-slate-500">
+                            Enter your name and click Search Member to find your record.
+                        </p>
+                    </div>
+                @endif
 
-                    {{-- BACK --}}
+                <div class="flex items-center justify-between border-t border-[#E9EDE9] pt-5">
                     <button
                         type="button"
                         @click="step = 1"
-                        class="flex h-12 w-full items-center justify-center rounded-xl border border-[#DCE2DF] px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                        class="flex h-11 items-center justify-center rounded-xl border border-[#DCE2DF] px-5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                     >
                         Back
                     </button>
 
+                    <p class="text-xs text-slate-400">
+                        Select your record to continue.
+                    </p>
+                </div>
+            </div>
+
+            {{-- ===================================== --}}
+            {{-- STEP 3: REGISTRATION INFORMATION     --}}
+            {{-- ===================================== --}}
+            <div x-show="step === 3" x-cloak x-transition
+                 class="space-y-8 px-6 py-8 sm:px-8">
+
+                {{-- SELECTED MEMBER --}}
+                <div class="rounded-xl border border-[#DCE8D5] bg-[#F5F8F2] p-5">
+                    <div class="mb-3 flex items-center justify-between">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-[#789A60]">
+                            Selected Member Account
+                        </p>
+                        <span class="rounded-full bg-[#E3EEDB] px-3 py-1 text-[10px] font-bold text-[#587447]">
+                            Selected
+                        </span>
+                    </div>
+
+                    @if($selectedMember)
+                        <p class="text-lg font-bold text-[#172B3A]">
+                            {{ $selectedMember->firstname }}
+                            {{ $selectedMember->middlename }}
+                            {{ $selectedMember->lastname }}
+                        </p>
+                        <p class="mt-1 text-xs text-slate-500">
+                            {{ $selectedMember->member_type ?? 'Member' }} Account
+                        </p>
+                    @else
+                        <p class="text-sm text-red-500">
+                            No member account selected. Please go back and select a record.
+                        </p>
+                    @endif
+
+                    <button
+                        type="button"
+                        @click="step = 2"
+                        class="mt-3 text-xs font-semibold text-[#789A60] hover:underline"
+                    >
+                        Change selected member
+                    </button>
                 </div>
 
+                {{-- SELECTED ACCOUNT TYPE --}}
+                <div class="flex items-center justify-between rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Account Classification
+                        </p>
+                        <p class="mt-1 text-sm font-bold text-[#172B3A]"
+                           x-text="classification === 'residential'
+                                ? 'Residential'
+                                : 'Juridical / Public Building'">
+                        </p>
+                    </div>
+                    <button type="button"
+                            @click="step = 1"
+                            class="text-xs font-semibold text-[#789A60] hover:underline">
+                        Change
+                    </button>
+                </div>
 
-                {{-- ===================================== --}}
-                {{-- STEP 3: REGISTRATION DETAILS          --}}
-                {{-- ===================================== --}}
-                <div x-show="step === 3" x-cloak x-transition
-                     class="space-y-8 px-6 py-8 sm:px-8">
-
-                    {{-- SELECTED MEMBER --}}
-                    <div class="rounded-xl border border-[#DCE8D5] bg-[#F5F8F2] p-4">
-                        <div class="flex items-center justify-between gap-3">
-                            <div>
-                                <p class="text-[10px] font-bold uppercase tracking-wider text-[#789A60]">
-                                    Selected Member Account
-                                </p>
-
-                                @if($selectedMember)
-                                    <p class="mt-1 text-sm font-bold text-[#172B3A]">
-                                        {{ $selectedMember->firstname }}
-                                        {{ $selectedMember->middlename }}
-                                        {{ $selectedMember->lastname }}
-                                    </p>
-
-                                    <p class="mt-1 text-xs text-slate-500">
-                                        {{ strtoupper($selectedMember->member_type ?? '') }}
-                                    </p>
-                                @else
-                                    <p class="mt-1 text-sm text-red-500">
-                                        No member account selected.
-                                    </p>
-                                @endif
-                            </div>
-
-                            <button
-                                type="button"
-                                @click="step = 2"
-                                class="text-xs font-semibold text-[#789A60] hover:underline"
-                            >
-                                Change Account
-                            </button>
+                {{-- ACCOUNT INFORMATION --}}
+                <section>
+                    <div class="mb-5 flex items-center gap-3">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
+                            01
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-bold text-[#172B3A]">
+                                Cooperative Account Information
+                            </h4>
+                            <p class="mt-1 text-xs text-slate-500">
+                                Provide your electric service account details.
+                            </p>
                         </div>
                     </div>
 
-                    {{-- ACCOUNT INFORMATION --}}
-                    <section>
-                        <div class="mb-5 flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
-                                01
-                            </span>
-
-                            <div>
-                                <h4 class="text-sm font-bold text-[#172B3A]">
-                                    Cooperative Account Information
-                                </h4>
-                                <p class="mt-1 text-xs text-slate-500">
-                                    Provide your electric service account details.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-5">
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Membership / Account Number <span class="text-red-500">*</span>
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="account_number"
-                                    placeholder="Enter your account number"
-                                    required
-                                    class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                >
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Complete Address <span class="text-red-500">*</span>
-                                </label>
-
-                                <textarea
-                                    name="address"
-                                    rows="3"
-                                    placeholder="House number, street, barangay, municipality"
-                                    required
-                                    class="w-full rounded-xl border border-[#DCE2DF] px-4 py-3 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                ></textarea>
-                            </div>
-                        </div>
-                    </section>
-
-                    {{-- RESIDENTIAL INFORMATION --}}
-                    <section
-                        x-show="classification === 'residential'"
-                        x-cloak
-                        class="space-y-5"
-                    >
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
-                                02
-                            </span>
-
-                            <div>
-                                <h4 class="text-sm font-bold text-[#172B3A]">
-                                    Member-Consumer Information
-                                </h4>
-                                <p class="mt-1 text-xs text-slate-500">
-                                    Enter the personal details of the member-consumer.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="grid gap-5 sm:grid-cols-2">
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    First Name <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" name="first_name"
-                                       placeholder="First name"
-                                       required
-                                       autocomplete="given-name"
-                                       class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Middle Name
-                                </label>
-                                <input type="text" name="middle_name"
-                                       placeholder="Middle name"
-                                       class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Last Name <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" name="last_name"
-                                       placeholder="Last name"
-                                       required
-                                       autocomplete="family-name"
-                                       class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Suffix
-                                </label>
-                                <input type="text" name="suffix"
-                                       placeholder="e.g. Jr., Sr., III"
-                                       class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10">
-                            </div>
-                        </div>
-                    </section>
-
-                    {{-- JURIDICAL INFORMATION --}}
-                    <section
-                        x-show="classification === 'juridical_public_building'"
-                        x-cloak
-                        class="space-y-5 rounded-xl border border-[#DCE2DF] bg-[#F8FAF8] p-5"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E9EFF5] text-[#365D7A]">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="1.7">
-                                    <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-8h6v8"/>
-                                </svg>
-                            </div>
-
-                            <div>
-                                <h4 class="text-sm font-bold text-[#172B3A]">
-                                    Organization Information
-                                </h4>
-                                <p class="mt-1 text-xs text-slate-500">
-                                    Provide the organization and its authorized representative details.
-                                </p>
-                            </div>
-                        </div>
-
+                    <div class="space-y-5">
                         <div>
                             <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                Organization / Establishment Name <span class="text-red-500">*</span>
+                                Membership / Account Number <span class="text-red-500">*</span>
                             </label>
 
+                            <x-ui.select
+                                wire:model.live="selectedAccountNumber"
+                                name="account_number"
+                                :options="$accounts->pluck('c_id', 'c_id')->map(fn ($id) => (string) $id)->toArray()"
+                                placeholder="Select an account number"
+                                class="w-full"
+                            />
+
+                            @if($selectedMember && $accounts->isEmpty())
+                                <p class="mt-2 text-xs text-red-500">
+                                    No accounts found for this member.
+                                </p>
+                            @endif
+                        </div>
+                    </div>
+                </section>
+
+                {{-- RESIDENTIAL INFORMATION --}}
+                <section x-show="classification === 'residential'"
+                         x-cloak class="space-y-5">
+
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
+                            02
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-bold text-[#172B3A]">
+                                Member-Consumer Information
+                            </h4>
+                            <p class="mt-1 text-xs text-slate-500">
+                                Your selected member record.
+                            </p>
+                        </div>
+                    </div>
+
+
+                @if($selectedMember)
+                    <div class="grid gap-4 sm:grid-cols-2">
+
+                        {{-- FIRST NAME --}}
+                        <div class="rounded-xl border border-[#E3E9E4] p-4">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">
+                                First Name
+                            </p>
+                            <p class="mt-1 text-sm font-semibold text-[#172B3A]">
+                                {{ $selectedMember->firstname }}
+                            </p>
+                        </div>
+
+                        {{-- MIDDLE NAME --}}
+                        <div class="rounded-xl border border-[#E3E9E4] p-4">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">
+                                Middle Name
+                            </p>
+                            <p class="mt-1 text-sm font-semibold text-[#172B3A]">
+                                {{ $selectedMember->middlename ?: '—' }}
+                            </p>
+                        </div>
+
+                        {{-- LAST NAME --}}
+                        <div class="rounded-xl border border-[#E3E9E4] p-4">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">
+                                Last Name
+                            </p>
+                            <p class="mt-1 text-sm font-semibold text-[#172B3A]">
+                                {{ $selectedMember->lastname }}
+                            </p>
+                        </div>
+
+                        {{-- MEMBERSHIP TYPE --}}
+                        <div class="rounded-xl border border-[#E3E9E4] p-4">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">
+                                Membership Type
+                            </p>
+                            <p class="mt-1 text-sm font-semibold text-[#172B3A]">
+                                {{ $selectedMember->member_type ?? '—' }}
+                            </p>
+                        </div>
+
+                        {{-- MEMBERSHIP TYPE --}}
+                        <div class="rounded-xl border border-[#E3E9E4] p-4">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">
+                                Complete Address
+                            </p>
+                            <p class="mt-1 text-sm font-semibold text-[#172B3A]">
+                                {{ $selectedMember->complete_address?? '—' }}
+                            </p>
+                        </div>
+
+                    </div>
+                @endif
+
+                </section>
+
+                {{-- JURIDICAL INFORMATION --}}
+                <section x-show="classification === 'juridical_public_building'"
+                         x-cloak
+                         class="space-y-5 rounded-xl border border-[#DCE2DF] bg-[#F8FAF8] p-5">
+
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E9EFF5] text-[#365D7A]">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="1.7">
+                                <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-8h6v8"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-[#172B3A]">
+                                Organization Information
+                            </h4>
+                            <p class="mt-1 text-xs text-slate-500">
+                                Provide the authorized representative details.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                            Organization / Establishment Name <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="organization_name"
+                            placeholder="Enter organization or building name"
+                            required
+                            class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
+                        >
+                    </div>
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                                Representative Name <span class="text-red-500">*</span>
+                            </label>
                             <input
                                 type="text"
-                                name="organization_name"
+                                name="representative_name"
+                                placeholder="Authorized representative"
                                 required
-                                placeholder="Enter organization or building name"
                                 class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
                             >
                         </div>
 
-                        <div class="grid gap-5 sm:grid-cols-2">
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Representative Name <span class="text-red-500">*</span>
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="representative_name"
-                                    required
-                                    placeholder="Authorized representative"
-                                    class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                >
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Position / Designation <span class="text-red-500">*</span>
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="representative_position"
-                                    required
-                                    placeholder="e.g. Manager, Director"
-                                    class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                >
-                            </div>
-                        </div>
-                    </section>
-
-                    {{-- CONTACT INFORMATION --}}
-                    <section>
-                        <div class="mb-5 flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
-                                03
-                            </span>
-
-                            <div>
-                                <h4 class="text-sm font-bold text-[#172B3A]">
-                                    Contact Information
-                                </h4>
-                                <p class="mt-1 text-xs text-slate-500">
-                                    How can we contact you regarding the assembly?
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="grid gap-5 sm:grid-cols-2">
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Mobile Number <span class="text-red-500">*</span>
-                                </label>
-
-                                <input
-                                    type="tel"
-                                    name="mobile_number"
-                                    placeholder="09XX XXX XXXX"
-                                    autocomplete="tel"
-                                    required
-                                    class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                >
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
-                                    Email Address
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="you@example.com"
-                                    autocomplete="email"
-                                    class="h-12 w-full rounded-xl border border-[#DCE2DF] px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
-                                >
-                            </div>
-                        </div>
-                    </section>
-
-                    {{-- CONSENT --}}
-                    <div class="rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
-                        <label class="flex cursor-pointer items-start gap-3">
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                                Position / Designation <span class="text-red-500">*</span>
+                            </label>
                             <input
-                                type="checkbox"
-                                name="consent"
-                                value="1"
+                                type="text"
+                                name="representative_position"
+                                placeholder="e.g. Manager, Director"
                                 required
-                                class="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#789A60]"
+                                class="h-12 w-full rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
                             >
+                        </div>
+                    </div>
+                </section>
 
-                            <span class="text-xs leading-6 text-slate-600">
-                                I certify that the information I provided is accurate
-                                and authorize the cooperative to use my information
-                                for AGM registration and attendance verification
-                                purposes.
-                                <span class="text-red-500">*</span>
-                            </span>
+                {{-- CONTACT INFORMATION --}}
+                <section>
+                    <div class="mb-5 flex items-center gap-3">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF0E6] text-sm font-bold text-[#789A60]">
+                            03
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-bold text-[#172B3A]">
+                                Contact Information
+                            </h4>
+                            <p class="mt-1 text-xs text-slate-500">
+                                How can we contact you regarding the assembly?
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                                Mobile Number <span class="text-red-500">*</span>
+                            </label>
+                            <x-ui.input type="tel" name="mobile_number" autocomplete="tel" placeholder="09XX XXX XXXX" />
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                                Email Address
+                            </label>
+                            <x-ui.input type="email" name="email" autocomplete="email" placeholder="you@example.com" />
+                        </div>
+                       <div class="w-full min-w-0">
+                        <label for="date_of_birth" class="mb-2 block text-xs font-semibold text-[#263B4B]">
+                            Date of Birth <span class="text-red-500">*</span>
                         </label>
-                    </div>
 
-                    {{-- ACTIONS --}}
-                    <div class="flex flex-col-reverse gap-3 sm:flex-row">
-
-                        <button
-                            type="button"
-                            @click="step = 2"
-                            class="flex h-12 items-center justify-center rounded-xl border border-[#DCE2DF] px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                        <input
+                            type="date"
+                            id="date_of_birth"
+                            name="date_of_birth"
+                            x-model="dateOfBirth"
+                            required
+                            class="h-12 w-full min-w-0 rounded-xl border border-[#DCE2DF] bg-white px-4 text-sm outline-none focus:border-[#789A60] focus:ring-4 focus:ring-[#789A60]/10"
                         >
-                            Back
-                        </button>
-
-                        <button
-                            type="submit"
-                            class="flex h-12 flex-1 items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 text-sm font-semibold text-white shadow-lg shadow-[#172B3A]/10 transition hover:bg-[#243E50]"
-                        >
-                            Submit Registration
-
-                            <svg class="h-4 w-4" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14m-6-6 6 6-6 6"/>
-                            </svg>
-                        </button>
                     </div>
+                    </div>
+                </section>
 
-                    <p class="text-center text-xs leading-5 text-slate-400">
-                        Please review your information before submitting.
-                        Your registration will be subject to verification.
-                    </p>
+               {{-- CONSENT --}}
+                <div class="rounded-xl border border-[#E3E9E4] bg-[#F8FAF8] p-4">
+                    <label class="flex cursor-pointer items-start gap-3">
+                        <input
+                            type="checkbox"
+                            name="consent"
+                            value="1"
+                            x-model="consentAccepted"
+                            class="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#789A60]"
+                        >
+
+                        <span class="text-xs leading-6 text-slate-600">
+                            I certify that the information I provided is accurate
+                            and authorize the cooperative to use my information
+                            for AGM registration and attendance verification
+                            purposes.
+                            <span class="text-red-500">*</span>
+                        </span>
+                    </label>
                 </div>
 
-            </form>
+                {{-- ACTIONS --}}
+                <div class="flex flex-col-reverse gap-3 sm:flex-row">
+                    <button
+                        type="button"
+                        @click="step = 2"
+                        class="flex h-12 items-center justify-center rounded-xl border border-[#DCE2DF] px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                    >
+                        Back
+                    </button>
+
+                    <button
+                        type="button"
+                        :disabled="!dateOfBirth || !consentAccepted"
+                        class="cursor-pointer flex min-h-14 flex-1 items-center justify-center gap-3 rounded-xl bg-[#172B3A] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#172B3A]/10 transition hover:bg-[#243E50] disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Submit Registration
+
+                        <svg class="h-4 w-4" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14m-6-6 6 6-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-center text-xs leading-5 text-slate-400">
+                    Please review your information before submitting.
+                    Your registration will be subject to verification.
+                </p>
+            </div>
         </div>
 
         {{-- FOOTER --}}
@@ -830,6 +898,5 @@
                 Member-Consumer Registration Portal
             </p>
         </footer>
-
     </main>
 </div>
