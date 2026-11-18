@@ -6,9 +6,6 @@
         {{-- PAGE HEADING --}}
         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-                <p class="text-sm font-semibold text-[#789A60]">
-                    Assembly Management
-                </p>
 
                 <h2 class="mt-1 text-2xl font-extrabold tracking-tight text-[#172B3A]">
                     Dashboard Overview
