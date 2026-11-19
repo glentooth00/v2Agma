@@ -8,13 +8,16 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\AgmaRegistration;
 use Livewire\WithFileUploads;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Devxisas\QrStudio\Facades\QrCode;
+
 
 #[Layout('components.layout.registration', ['title' => 'Member Registration'])]
 class MemberRegistration extends Component
 {
 
     use WithFileUploads;
-
+    
     public string $classification = '';
     public $validId;
     public string $firstname = '';
@@ -30,7 +33,9 @@ class MemberRegistration extends Component
     public bool $consentAccepted = false;
     public bool $registrationSaved = false;
     public string $membership_id = '';
-
+    public $qrCode = '';
+    public $registeredMember = [];
+    public $registeredAccountNumber = null;
     public bool $searchPerformed = false;
 
     public function searchMember(): void
@@ -169,6 +174,7 @@ class MemberRegistration extends Component
         ]);
     }
 
+
     public function submitRegistration()
     {
         $this->validate([
@@ -204,7 +210,6 @@ class MemberRegistration extends Component
         // Save the uploaded ID file.
         $validIdPath = $this->validId->store('valid-ids', 'public');
 
-
         AgmaRegistration::create([
             'registration_type' => 'online_registration',
             'classification' => $this->classification,
@@ -219,7 +224,76 @@ class MemberRegistration extends Component
             'valid_id_path' => $validIdPath,
         ]);
 
+        // Generate QR code using membership ID.
+        $qr = QrCode::size(250)
+        ->margin(0)
+        ->generate($member->membership_id);
+
+        $this->qrCode = (string) $qr;
+
         $this->registrationSaved = true;
+    }
+
+
+    public function downloadMemberCard()
+    {
+        // Retrieve the selected member.
+        $member = Member::findOrFail($this->selectedMemberId);
+
+        // Generate the QR code if it is not already available.
+        $qrCode = $this->qrCode;
+
+        if (empty($qrCode)) {
+            $qr = QrCode::size(250)
+                ->margin(0)
+                ->generate($member->membership_id);
+
+            $qrCode = (string) $qr;
+        }
+
+        // Generate the member ID PDF.
+        $pdf = Pdf::loadView('pdf.member-card', [
+            'qrCode' => $qrCode,
+            'member' => $member,
+            'accountNumber' => $this->selectedAccountNumber,
+        ]);
+
+        // CR80 ID card dimensions: 85.6mm × 54mm.
+        $pdf->setPaper([0, 0, 242.65, 153.07]);
+
+        $output = $pdf->output();
+
+        return response()->streamDownload(function () use ($output) {
+            echo $output;
+        }, 'AGMA-Member-ID-' . $member->membership_id . '.pdf', [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    public function registerAnotherAccount(): void
+    {
+        $this->reset([
+            'classification',
+            'firstname',
+            'middlename',
+            'lastname',
+            'selectedAccountNumber',
+            'searchPerformed',
+            'dateOfBirth',
+            'selectedMemberId',
+            'district',
+            'brgy',
+            'street',
+            'municipality',
+            'consentAccepted',
+            'registrationSaved',
+            'validId',
+            'qrCode',
+        ]);
+
+        $this->resetValidation();
+
+        $this->dispatch('registration-reset');
     }
 
     
