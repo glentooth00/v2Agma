@@ -51,7 +51,7 @@
 
                 <div
                         id="agma-member-card"
-                        class="w-full max-w-sm rounded-2xl bg-[#172B3A] p-6 text-white shadow-xl"
+                        class="mx-auto w-full max-w-sm rounded-2xl bg-[#172B3A] p-6 text-white shadow-xl"
                     >
 
                     {{-- CARD HEADER --}}
@@ -67,14 +67,12 @@
 
                     {{-- QR CODE --}}
                     <div class="my-5 flex justify-center">
-                        <div class="rounded-xl bg-white p-3 [&_svg]:block [&_svg]:h-40 [&_svg]:w-40">
-                            {!! $qrCode !!}
+                        <div class="flex h-44 w-44 items-center justify-center rounded-xl border border-[#E5EAE5] bg-white p-3 shadow-sm">
+                            <div class="[&_svg]:block [&_svg]:h-full [&_svg]:w-full">
+                                {!! $qrCode !!}
+                            </div>
                         </div>
                     </div>
-
-                    <p class="mb-4 text-center text-[9px] tracking-widest text-[#A8C58D]">
-                        SCAN TO VERIFY MEMBERSHIP
-                    </p>
 
                     {{-- MEMBER DETAILS --}}
                     <div class="text-center">

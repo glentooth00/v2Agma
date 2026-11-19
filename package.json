@@ -21,6 +21,6 @@
         "@laravel/multiplex": "^0.4.1"
     },
     "dependencies": {
-        "html2canvas-pro": "^2.5.0"
+        "html-to-image": "^1.11.13"
     }
 }
