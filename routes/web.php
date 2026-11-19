@@ -31,5 +31,5 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-Route::get('/agm-registration', MemberRegistration::class)
+Route::get('/agma-registration', MemberRegistration::class)
     ->name('registration.index');
