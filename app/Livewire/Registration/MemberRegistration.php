@@ -38,12 +38,32 @@ class MemberRegistration extends Component
     public $registeredAccountNumber = null;
     public bool $searchPerformed = false;
 
+
     public function searchMember(): void
     {
-        $this->searchPerformed = true;
+        $this->resetValidation();
+
+        // Reset previous search selection.
+        $this->searchPerformed = false;
         $this->selectedMemberId = null;
         $this->selectedAccountNumber = null;
+
+        // Validate based on classification.
+        if ($this->classification === 'juridical_public_building') {
+            $this->validate([
+                'firstname' => 'required|string|max:255',
+            ]);
+        } else {
+            $this->validate([
+                'firstname' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+            ]);
+        }
+
+        // Execute the search only after validation.
+        $this->searchPerformed = true;
     }
+
 
     public function clearSearch(): void
     {
