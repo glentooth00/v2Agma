@@ -64,7 +64,6 @@ class MemberRegistration extends Component
         $this->searchPerformed = true;
     }
 
-
     public function clearSearch(): void
     {
         $this->reset([
@@ -194,7 +193,6 @@ class MemberRegistration extends Component
         ]);
     }
 
-
     public function submitRegistration()
     {
         $this->validate([
@@ -253,7 +251,6 @@ class MemberRegistration extends Component
 
         $this->registrationSaved = true;
     }
-
 
     public function downloadMemberCard()
     {

@@ -30,106 +30,118 @@
         </div>
 
         {{-- STATISTICS --}}
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
             {{-- TOTAL MEMBERS --}}
-            <div class="group rounded-2xl border border-[#E8ECE7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">
-                            Total Members
-                        </p>
-
-                        <h3 class="mt-3 text-3xl font-extrabold tracking-tight text-[#172B3A]">
-                            {{ number_format($totalMembers ?? 0) }}
-                        </h3>
-                    </div>
-
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                        <x-lucide-users class="h-5 w-5" />
-                    </div>
+            <div class="group relative isolate overflow-hidden rounded-2xl border border-[#E6EBE3] bg-[#FCFDFB] p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#172B3A]/5">
+                <div class="absolute -right-5 -bottom-7 -z-10 text-[#789A60]/[0.07] transition duration-300 group-hover:scale-110 group-hover:text-[#789A60]/[0.12]">
+                    <x-lucide-users class="size-36 stroke-[1.2]" />
                 </div>
 
-                <div class="mt-5 border-t border-[#F0F2EE] pt-3">
-                    <p class="text-xs text-slate-400">
-                        Registered member-consumers
+                <div class="flex items-center justify-between">
+                    <div class="flex size-10 items-center justify-center rounded-xl bg-[#EDF2E9] text-[#718B5D]">
+                        <x-lucide-users class="size-5" />
+                    </div>
+                    <span class="text-[10px] font-semibold tracking-[0.18em] text-[#A0A99A]">01</span>
+                </div>
+
+                <div class="mt-7">
+                    <p class="text-3xl font-semibold tracking-tight text-[#172B3A] tabular-nums">
+                        {{ number_format($totalMembers ?? 0) }}
+                    </p>
+                    <p class="mt-1 text-xs font-medium tracking-wide text-[#718078]">
+                        Total Members
                     </p>
                 </div>
+
+                <div class="mt-5 h-px w-full bg-[#E9EDE7]"></div>
+                <p class="mt-3 text-[10px] font-medium uppercase tracking-wider text-[#A0AAA0]">
+                    Member database
+                </p>
             </div>
 
-            {{-- REGISTRATIONS --}}
-            <div class="group rounded-2xl border border-[#E8ECE7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">
-                            AGM Registrations
-                        </p>
-
-                        <h3 class="mt-3 text-3xl font-extrabold tracking-tight text-[#172B3A]">
-                            {{ number_format($totalRegistrations ?? 0) }}
-                        </h3>
-                    </div>
-
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
-                        <x-lucide-clipboard class="h-5 w-5" />
-                    </div>
+            {{-- ONLINE REGISTRATIONS --}}
+            <div class="group relative isolate overflow-hidden rounded-2xl border border-[#E5EAF0] bg-[#FCFDFE] p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#172B3A]/5">
+                <div class="absolute -right-5 -bottom-7 -z-10 text-[#6686A8]/[0.07] transition duration-300 group-hover:scale-110 group-hover:text-[#6686A8]/[0.12]">
+                    <x-lucide-clipboard-list class="size-36 stroke-[1.2]" />
                 </div>
 
-                <div class="mt-5 border-t border-[#F0F2EE] pt-3">
-                    <p class="text-xs text-slate-400">
-                        Total assembly registrations
+                <div class="flex items-center justify-between">
+                    <div class="flex size-10 items-center justify-center rounded-xl bg-[#EAF0F7] text-[#6686A8]">
+                        <x-lucide-clipboard-list class="size-5" />
+                    </div>
+                    <span class="text-[10px] font-semibold tracking-[0.18em] text-[#A0A9B3]">02</span>
+                </div>
+
+                <div class="mt-7">
+                    <p class="text-3xl font-semibold tracking-tight text-[#172B3A] tabular-nums">
+                        {{ number_format($totalRegistrations ?? 0) }}
+                    </p>
+                    <p class="mt-1 text-xs font-medium tracking-wide text-[#718078]">
+                        AGMA Online Registrations
                     </p>
                 </div>
+
+                <div class="mt-5 h-px w-full bg-[#E9EDF2]"></div>
+                <p class="mt-3 text-[10px] font-medium uppercase tracking-wider text-[#A0A9B3]">
+                    Online registration records
+                </p>
             </div>
 
             {{-- MEMBERS PRESENT --}}
-            <div class="group rounded-2xl border border-[#E8ECE7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">
-                            Members Present
-                        </p>
-
-                        <h3 class="mt-3 text-3xl font-extrabold tracking-tight text-[#172B3A]">
-                            {{ number_format($totalPresent ?? 0) }}
-                        </h3>
-                    </div>
-
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 text-green-600">
-                        <x-lucide-user-check class="h-5 w-5" />
-                    </div>
+            <div class="group relative isolate overflow-hidden rounded-2xl border border-[#E3EBE5] bg-[#FCFDFC] p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#172B3A]/5">
+                <div class="absolute -right-5 -bottom-7 -z-10 text-[#64977B]/[0.07] transition duration-300 group-hover:scale-110 group-hover:text-[#64977B]/[0.12]">
+                    <x-lucide-user-check class="size-36 stroke-[1.2]" />
                 </div>
 
-                <div class="mt-5 border-t border-[#F0F2EE] pt-3">
-                    <p class="text-xs text-slate-400">
-                        Successfully checked in
+                <div class="flex items-center justify-between">
+                    <div class="flex size-10 items-center justify-center rounded-xl bg-[#E8F1EB] text-[#64977B]">
+                        <x-lucide-user-check class="size-5" />
+                    </div>
+                    <span class="text-[10px] font-semibold tracking-[0.18em] text-[#A0AAA1]">03</span>
+                </div>
+
+                <div class="mt-7">
+                    <p class="text-3xl font-semibold tracking-tight text-[#172B3A] tabular-nums">
+                        {{ number_format($totalPresent ?? 0) }}
+                    </p>
+                    <p class="mt-1 text-xs font-medium tracking-wide text-[#718078]">
+                        Members Present
                     </p>
                 </div>
+
+                <div class="mt-5 h-px w-full bg-[#E8EDE9]"></div>
+                <p class="mt-3 text-[10px] font-medium uppercase tracking-wider text-[#A0AAA1]">
+                    Assembly attendance
+                </p>
             </div>
 
-            {{-- ACTIVE EVENTS --}}
-            <div class="group rounded-2xl border border-[#E8ECE7] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">
-                            Active AGM Events
-                        </p>
-
-                        <h3 class="mt-3 text-3xl font-extrabold tracking-tight text-[#172B3A]">
-                            {{ number_format($activeEvents ?? 0) }}
-                        </h3>
-                    </div>
-
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
-                        <x-lucide-calendar-days class="h-5 w-5" />
-                    </div>
+            {{-- INACTIVE MEMBERS --}}
+            <div class="group relative isolate overflow-hidden rounded-2xl border border-[#ECE8E0] bg-[#FDFCF9] p-5 transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#172B3A]/5">
+                <div class="absolute -right-5 -bottom-7 -z-10 text-[#A58D6B]/[0.07] transition duration-300 group-hover:scale-110 group-hover:text-[#A58D6B]/[0.12]">
+                    <x-lucide-user-round-x class="size-36 stroke-[1.2]" />
                 </div>
 
-                <div class="mt-5 border-t border-[#F0F2EE] pt-3">
-                    <p class="text-xs text-slate-400">
-                        Currently active assemblies
+                <div class="flex items-center justify-between">
+                    <div class="flex size-10 items-center justify-center rounded-xl bg-[#F1EDE5] text-[#A58D6B]">
+                        <x-lucide-user-round-x class="size-5" />
+                    </div>
+                    <span class="text-[10px] font-semibold tracking-[0.18em] text-[#AAA397]">04</span>
+                </div>
+
+                <div class="mt-7">
+                    <p class="text-3xl font-semibold tracking-tight text-[#172B3A] tabular-nums">
+                        {{ number_format($inactiveMembers ?? 0) }}
+                    </p>
+                    <p class="mt-1 text-xs font-medium tracking-wide text-[#777064]">
+                        Inactive Members
                     </p>
                 </div>
+
+                <div class="mt-5 h-px w-full bg-[#EEEAE3]"></div>
+                <p class="mt-3 text-[10px] font-medium uppercase tracking-wider text-[#AAA397]">
+                    Member records
+                </p>
             </div>
 
         </div>
