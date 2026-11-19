@@ -7,6 +7,7 @@
     consentAccepted: @entangle('consentAccepted')
     }"
     x-on:member-selected.window="step = 3"
+    x-on:registration-reset.window="step = 1"
     class="min-h-screen bg-[#F7F8F6]"
 >
     {{-- HEADER --}}
@@ -41,6 +42,96 @@
     </header>
 
     <main class="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+
+
+        @if ($registrationSaved)
+
+            {{-- SUCCESSFUL REGISTRATION / MEMBER CARD --}}
+            <div class="flex flex-col items-center gap-5 py-8">
+
+                <div
+                        id="agma-member-card"
+                        class="w-full max-w-sm rounded-2xl bg-[#172B3A] p-6 text-white shadow-xl"
+                    >
+
+                    {{-- CARD HEADER --}}
+                    <div class="border-b border-[#526675] pb-4 text-center">
+                        <h2 class="text-xl font-extrabold tracking-widest">
+                            AGMA <span class="text-[#A8C58D]">ONE</span>
+                        </h2>
+
+                        <p class="mt-1 text-[9px] tracking-[0.16em] text-[#A8C58D]">
+                            OFFICIAL ASSEMBLY ACCESS · MEMBER PASS
+                        </p>
+                    </div>
+
+                    {{-- QR CODE --}}
+                    <div class="my-5 flex justify-center">
+                        <div class="rounded-xl bg-white p-3 [&_svg]:block [&_svg]:h-40 [&_svg]:w-40">
+                            {!! $qrCode !!}
+                        </div>
+                    </div>
+
+                    <p class="mb-4 text-center text-[9px] tracking-widest text-[#A8C58D]">
+                        SCAN TO VERIFY MEMBERSHIP
+                    </p>
+
+                    {{-- MEMBER DETAILS --}}
+                    <div class="text-center">
+                        <p class="text-lg font-bold">
+                            {{ $selectedMember->firstname ?? '' }}
+                            {{ $selectedMember->middlename ?? '' }}
+                            {{ $selectedMember->lastname ?? '' }}
+                        </p>
+
+                        {{-- <p class="mt-1 text-sm font-semibold text-[#A8C58D]">
+                            {{ $selectedMember->membership_id ?? $selectedMemberId }}
+                        </p> --}}
+
+                        <p class="mt-1 text-xs text-slate-300">
+                            REGISTERED ACCOUNT NUMBER
+                        </p>
+
+                        <p class="mt-1 text-sm font-bold">
+                            {{ $selectedAccountNumber }}
+                        </p>
+                    </div>
+
+                    {{-- CARD FOOTER --}}
+                    <div class="mt-6 border-t border-[#526675] pt-4 text-center">
+                        <p class="text-[9px] font-semibold tracking-widest text-[#A8C58D]">
+                            PRESENT THIS PASS AT THE ASSEMBLY
+                        </p>
+
+                        <p class="mt-2 text-[9px] text-slate-400">
+                            Every member. Every voice. One assembly.
+                        </p>
+                    </div>
+
+                </div>
+
+                {{-- DOWNLOAD BUTTON --}}
+                <button
+                    type="button"
+                    onclick="downloadAgmaCard()"
+                    class="inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border border-[#789A60] bg-[#F3F7F0] px-5 py-3 text-sm font-semibold text-[#587447] transition hover:bg-[#EAF1E5]"
+                >
+                    <x-lucide-download class="size-4" />
+                    Download Member ID
+                </button>
+
+                {{-- REGISTER ANOTHER ACCOUNT --}}
+                <button
+                    type="button"
+                    wire:click="registerAnotherAccount"
+                    class="text-sm font-semibold text-[#789A60] hover:underline"
+                >
+                    Register Another Account
+                </button>
+
+            </div>
+
+        @else
 
         {{-- INTRO --}}
         <div class="mb-10 text-center">
@@ -467,10 +558,6 @@
                 wire:target="selectMember"
                 class="flex w-full items-center justify-between gap-4 border-b border-[#EEF1EE] px-4 py-4 text-left transition last:border-b-0 hover:bg-[#F5F8F2] disabled:cursor-wait disabled:opacity-60"
             >
-                {{-- MEMBERSHIP ID --}}
-                <p class="text-xs text-blue-600">
-                    Membership ID: {{ $member->membership_id }}
-                </p>
 
                 <div class="flex min-w-0 items-center gap-3">
                     <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EAF0E6] text-[#789A60]">
@@ -984,5 +1071,8 @@
                 Member-Consumer Registration Portal
             </p>
         </footer>
+
+        @endif
+
     </main>
 </div>
