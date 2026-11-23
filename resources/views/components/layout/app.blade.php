@@ -130,6 +130,13 @@
                             </x-ui.sidebar-menu-item>
 
                             <x-ui.sidebar-menu-item>
+                                <x-ui.sidebar-menu-button as="a" href="{{ route('scanner-users.index') }}" tooltip="Scanner Users">
+                                    <x-lucide-scan-line class="h-4 w-4" />
+                                    <span>Scanner Users</span>
+                                </x-ui.sidebar-menu-button>
+                            </x-ui.sidebar-menu-item>
+
+                            <x-ui.sidebar-menu-item>
                                 <x-ui.sidebar-menu-button as="a" href="#" tooltip="System Settings">
                                     <x-lucide-settings class="h-4 w-4" />
                                     <span>System Settings</span>
