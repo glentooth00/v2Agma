@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Registration\MemberRegistration;
 use App\Livewire\Members\MembersData;
+use App\Livewire\Scanner\ScannerUsers;
 
 Route::get('/', function () {
     return view('login');
@@ -18,13 +19,15 @@ Route::middleware('guest')->group(function () {
         ->name('login.store');
 });
 
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')
         ->name('dashboard');
 
     Route::get('/members', MembersData::class)
         ->name('members.index');
 
+    Route::get('/scanner-users', ScannerUsers::class)
+        ->name('scanner-users.index');
 
 
     Route::post('/logout', [LoginController::class, 'destroy'])
