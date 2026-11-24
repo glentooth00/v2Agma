@@ -37,6 +37,8 @@ class MemberRegistration extends Component
     public $registeredMember = [];
     public $registeredAccountNumber = null;
     public bool $searchPerformed = false;
+    public bool $alreadyRegistered = false;
+    public ?array $existingRegistration = null;
 
 
     public function searchMember(): void
@@ -47,6 +49,8 @@ class MemberRegistration extends Component
         $this->searchPerformed = false;
         $this->selectedMemberId = null;
         $this->selectedAccountNumber = null;
+        $this->alreadyRegistered = false;
+        $this->existingRegistration = null;
 
         // Validate based on classification.
         if ($this->classification === 'juridical_public_building') {
@@ -91,9 +95,12 @@ class MemberRegistration extends Component
         ]);
     }
 
+
     public function selectMember($id): void
     {
-        // Check whether the selected record exists.
+        $this->resetErrorBag();
+
+        // Find the selected member.
         $member = Member::where('membership_id', $id)->first();
 
         if (!$member) {
@@ -113,10 +120,34 @@ class MemberRegistration extends Component
         $this->street = $member->street ?? '';
         $this->municipality = $member->municipality ?? '';
 
-        $this->resetErrorBag('selectedMemberId');
+        // Reset previous duplicate-check result.
+        $this->alreadyRegistered = false;
+        $this->existingRegistration = null;
 
+        // Check whether this membership ID is already registered.
+        $registration = AgmaRegistration::where(
+            'membership_id',
+            $member->membership_id
+        )->latest('id')->first();
+
+        if ($registration) {
+            $this->alreadyRegistered = true;
+
+            $this->existingRegistration = [
+                'account_number' => $registration->account_number,
+                'status' => $registration->status,
+                'registration_type' => $registration->registration_type,
+                'created_at' => $registration->created_at?->format('M d, Y h:i A'),
+            ];
+
+            // Do not proceed to the registration form.
+            return;
+        }
+
+        // Only proceed if the member is not registered.
         $this->dispatch('member-selected');
     }
+
 
     public function render()
     {
@@ -209,6 +240,23 @@ class MemberRegistration extends Component
         ]);
 
         $member = Member::findOrFail($this->selectedMemberId);
+
+        // Prevent duplicate registration.
+        $existingRegistration = AgmaRegistration::where(
+            'membership_id',
+            $member->membership_id
+        )->exists();
+
+        if ($existingRegistration) {
+            $this->alreadyRegistered = true;
+
+            $this->addError(
+                'selectedMemberId',
+                'This member is already registered for the AGMA.'
+            );
+
+            return;
+        }
 
         // Verify that the selected account belongs to this member.
         $accountExists = DB::table('customer_details')

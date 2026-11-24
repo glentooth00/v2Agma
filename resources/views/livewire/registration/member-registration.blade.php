@@ -676,6 +676,60 @@
                     </div>
                 @endif
 
+                {{-- ALREADY REGISTERED WARNING DIALOG --}}
+                @if($alreadyRegistered)
+                    <div
+                        class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/50 px-4 py-6 backdrop-blur-sm"
+                        wire:key="already-registered-dialog"
+                    >
+                        <div
+                            class="w-full max-w-md overflow-hidden rounded-2xl border border-amber-200 bg-white shadow-2xl"
+                            role="alertdialog"
+                            aria-modal="true"
+                            aria-labelledby="already-registered-title"
+                        >
+                            {{-- Warning Header --}}
+                            <div class="flex flex-col items-center px-6 pt-8 text-center">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                                    <svg
+                                        class="h-8 w-8"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path d="M12 9v4m0 4h.01M10.3 3.9 2.5 17.5A2 2 0 0 0 4.2 20.5h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+                                    </svg>
+                                </div>
+
+                                <h3
+                                    id="already-registered-title"
+                                    class="mt-5 text-xl font-bold text-slate-800"
+                                >
+                                    Already Registered
+                                </h3>
+
+                                <p class="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                                    This member already has an existing AGMA ONE registration.
+                                    Duplicate registration is not allowed.
+                                </p>
+                            </div>
+
+                            {{-- Dialog Footer --}}
+                            <div class="mt-7 border-t border-amber-100 bg-amber-50/50 px-6 py-4">
+                                <button
+                                    type="button"
+                                    wire:click="$set('alreadyRegistered', false)"
+                                    class="w-full rounded-xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-700 focus:outline-none focus:ring-4 focus:ring-amber-200"
+                                >
+                                    Okay, I Understand
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+
                 <div class="flex items-center justify-between border-t border-[#E9EDE9] pt-5">
                     <button
                         type="button"
