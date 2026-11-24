@@ -15,6 +15,7 @@
         "devxisas/qr-studio": "^1.0",
         "gehrisandro/tailwind-merge-laravel": "^1.4",
         "laravel/framework": "^13.17",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^4.4",
         "mallardduck/blade-lucide-icons": "^2.0"
