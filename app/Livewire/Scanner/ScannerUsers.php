@@ -8,12 +8,12 @@ use App\Models\ScannerUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
-
 #[Layout('components.layout.app')]
 class ScannerUsers extends Component
 {
     public bool $showEditScannerUserModal = false;
     public bool $showScannerUserModal = false;
+
     public string $firstname = '';
     public string $middlename = '';
     public string $lastname = '';
@@ -21,7 +21,9 @@ class ScannerUsers extends Component
     public string $assignedStation = '';
     public string $username = '';
     public string $password = '';
+
     public ?int $editingScannerUserId = null;
+
     public string $editStatus = 'active';
     public string $newPassword = '';
     public string $editFirstname = '';
@@ -75,7 +77,6 @@ class ScannerUsers extends Component
         $this->resetValidation();
     }
 
-
     public function saveScannerUser(): void
     {
         $validated = $this->validate([
@@ -118,7 +119,6 @@ class ScannerUsers extends Component
 
         $this->resetValidation();
 
-        // BlatUI Sonner success notification
         $this->dispatch('scanner-user-created');
     }
 
@@ -168,13 +168,21 @@ class ScannerUsers extends Component
         $user->assigned_station = $validated['editAssignedStation'];
         $user->status = $validated['editStatus'];
 
-        if (!empty($validated['newPassword'])) {
+        $passwordChanged = !empty($validated['newPassword']);
+
+        if ($passwordChanged) {
             $user->password = Hash::make($validated['newPassword']);
         }
 
         $user->save();
 
-                $this->reset([
+        // Revoke all existing Sanctum tokens when the account is
+        // disabled or its password is changed.
+        if ($user->status !== 'active' || $passwordChanged) {
+            $user->tokens()->delete();
+        }
+
+        $this->reset([
             'editingScannerUserId',
             'editFirstname',
             'editMiddlename',
@@ -195,7 +203,5 @@ class ScannerUsers extends Component
 
         // Show success toast
         $this->dispatch('scanner-user-updated');
-
-        }
-
+    }
 }
