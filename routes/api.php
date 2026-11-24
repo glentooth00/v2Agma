@@ -4,7 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ScannerAuthController;
 use App\Http\Middleware\EnsureScannerIsActive;
-
+use App\Http\Controllers\Api\ScannerMemberController;
 /*
 |--------------------------------------------------------------------------
 | AGMA ONE API Routes
@@ -41,6 +41,12 @@ Route::prefix('scanner')->group(function () {
             ScannerAuthController::class,
             'me',
         ])->name('api.scanner.me');
+
+        // Find member using QR membership ID
+        Route::get('/member/{membershipId}', [
+            ScannerMemberController::class,
+            'show',
+        ])->name('api.scanner.member.show');
 
         // Scanner Logout
         Route::post('/logout', [
