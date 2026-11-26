@@ -68,6 +68,7 @@ class ScannerMemberController extends Controller
             'message' => 'Member registration found.',
 
             'data' => [
+                'agma_registration_id' => $registration->id,
                 'membership_id' => $registration->membership_id,
                 'full_name' => $fullName,
                 'account_number' => $registration->account_number,
