@@ -1,10 +1,10 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ScannerAuthController;
 use App\Http\Middleware\EnsureScannerIsActive;
 use App\Http\Controllers\Api\ScannerMemberController;
+use App\Http\Controllers\Api\ScannerAttendanceController;
 /*
 |--------------------------------------------------------------------------
 | AGMA ONE API Routes
@@ -24,17 +24,17 @@ Route::get('/health', function () {
 // Scanner Authentication
 Route::prefix('scanner')->group(function () {
 
-    // Scanner Login
-    Route::post('/login', [
-        ScannerAuthController::class,
-        'login',
-    ])->name('api.scanner.login');
+        // Scanner Login
+        Route::post('/login', [
+            ScannerAuthController::class,
+            'login',
+        ])->name('api.scanner.login');
 
-    // Authenticated Scanner Routes
-    Route::middleware([
-        'auth:sanctum',
-        EnsureScannerIsActive::class,
-    ])->group(function () {
+        // Authenticated Scanner Routes
+        Route::middleware([
+            'auth:sanctum',
+            EnsureScannerIsActive::class,
+        ])->group(function () {
 
         // Get authenticated scanner details
         Route::get('/me', [
@@ -47,6 +47,12 @@ Route::prefix('scanner')->group(function () {
             ScannerMemberController::class,
             'show',
         ])->name('api.scanner.member.show');
+
+        // Confirm attendance for an online registration.
+        Route::post('/attendance', [
+            ScannerAttendanceController::class,
+            'store',
+        ])->name('api.scanner.attendance.store');
 
         // Scanner Logout
         Route::post('/logout', [
